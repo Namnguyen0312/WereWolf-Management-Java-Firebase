@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500257200098",
+    "project_id": "werewolf-management-backend",
+    "storage_bucket": "werewolf-management-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500257200098:android:80afa8f7ad8a1d328f4bbb",
+        "android_client_info": {
+          "package_name": "code.org.werewolfmanagement"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKJZZdIc40ZlNTAG2W6JJcOSQF_VGFiDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

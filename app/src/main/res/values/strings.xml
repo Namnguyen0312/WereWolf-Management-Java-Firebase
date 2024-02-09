@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Werewolf ManageMent</string>
+    <string-array name="roles">
+        <item>Wolf</item>
+        <item>Villager</item>
+    </string-array>
+</resources>
