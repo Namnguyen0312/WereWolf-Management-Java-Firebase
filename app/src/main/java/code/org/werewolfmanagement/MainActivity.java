@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private void navigateCreateRoom() {
         Intent intent = new Intent(this, CreateRoomActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     public void initView() {

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -38,31 +40,45 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     private int countWolf = 0, countVillager = 0, countShield = 0;
 
+    private Animation animation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive_roles);
+
         initView();
 
+        setNameRoom();
 
         setInProgress(false);
+
         receiveRole();
 
     }
 
-    private void setRoles(){
+    private void setRoles() {
         // TODO: Set player one
+        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
+
+        if(countPlayerId >= roomModel.getNumberOfPlayer()){
+            nextPlayerBtn.setText("Play");
+        }
+
         playerTxt.setText("Player " + countPlayerId);
+        playerTxt.startAnimation(animation);
         String[] rolesArray = getApplicationContext().getResources().getStringArray(R.array.roles);
 
         ArrayList<String> rolesList = new ArrayList<>(java.util.Arrays.asList(rolesArray));
 
-        if(roomModel.getValueOfWolf() == countWolf){
+        if (roomModel.getValueOfWolf() == countWolf) {
             rolesList.remove("Wolf");
-        }if (roomModel.getValueOfVillager() == countVillager) {
+        }
+        if (roomModel.getValueOfVillager() == countVillager) {
             rolesList.remove("Villager");
-        }if (roomModel.getValueOfShield() == countShield) {
+        }
+        if (roomModel.getValueOfShield() == countShield) {
             rolesList.remove("Shield");
         }
 
@@ -75,6 +91,8 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         if (randomValue.equals("Wolf")) {
             roleImg.setImageResource(R.drawable.werewolf_icon);
             roleNameTxt.setText("Wolf");
+            roleImg.startAnimation(animation);
+            roleNameTxt.startAnimation(animation);
             countWolf++;
             Log.i("randomValue", randomValue);
             Log.i("countWolf", String.valueOf(countWolf));
@@ -82,17 +100,20 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         } else if (randomValue.equals("Villager")) {
             roleImg.setImageResource(R.drawable.villager_icon);
             roleNameTxt.setText("Villager");
+            roleImg.startAnimation(animation);
+            roleNameTxt.startAnimation(animation);
             countVillager++;
             Log.i("randomValue", randomValue);
             Log.i("countVillager", String.valueOf(countVillager));
-        }else {
+        } else {
             roleImg.setImageResource(R.drawable.shield_icon);
             roleNameTxt.setText("Shield");
+            roleImg.startAnimation(animation);
+            roleNameTxt.startAnimation(animation);
             countShield++;
             Log.i("randomValue", randomValue);
             Log.i("countShield", String.valueOf(countShield));
         }
-
 
 
         /**
@@ -102,14 +123,14 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         countPlayerId++;
     }
 
-
-
-
-    private void receiveRole() {
+    private void setNameRoom() {
         roomModel = AndroidUtil.getRoomModelFromIntent(getIntent());
         roomId = roomModel.getRoomId();
         String name = roomModel.getName();
         nameRoomTxt.setText(name);
+    }
+
+    private void receiveRole() {
         /**
          * Nhan role player 1
          */
@@ -120,10 +141,10 @@ public class ReceiveRolesActivity extends AppCompatActivity {
          */
         nextPlayerBtn.setOnClickListener(v -> {
 
-            if(countPlayerId > roomModel.getNumberOfPlayer()){
+            if (countPlayerId > roomModel.getNumberOfPlayer()) {
                 // TODO: Chuyen toi man hinh choi game
                 navigateToGame();
-            }else{
+            } else {
                 setRoles();
             }
 
@@ -131,9 +152,9 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     }
 
-    private void setPlayersToFirebase(){
+    private void setPlayersToFirebase() {
         setInProgress(true);
-        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel("Player"+ countPlayerId, randomValue)).addOnCompleteListener(task -> {
+        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel("Player" + countPlayerId, randomValue)).addOnCompleteListener(task -> {
             setInProgress(false);
         });
     }
@@ -142,6 +163,7 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), InGameActivity.class);
         AndroidUtil.passRoomModelAsIntent(intent, roomModel, roomId);
         startActivity(intent);
+        overridePendingTransition(R.anim.fade, R.anim.slide_out);
     }
 
     private void initView() {

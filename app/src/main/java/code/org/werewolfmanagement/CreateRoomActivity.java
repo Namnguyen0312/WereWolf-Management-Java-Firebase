@@ -38,6 +38,7 @@ public class CreateRoomActivity extends AppCompatActivity {
         intent.putExtra("name", nameRoomEdt.getText().toString());
         intent.putExtra("numberOfPlayer", numberEdt.getText().toString());
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
 

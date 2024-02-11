@@ -24,7 +24,7 @@ public class ChooseRolesActivity extends AppCompatActivity {
     private Button playBtn;
     private ProgressBar chooseRoleProgressBar;
     private int countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt;
-    private String nameRoom, numberOfPlayer;
+    private String nameRoom, numberOfPlayer, roomId;
     private RoomModel roomModel;
 
 
@@ -82,11 +82,9 @@ public class ChooseRolesActivity extends AppCompatActivity {
             FirebaseUtil.getRoomReference().add(roomModel).addOnCompleteListener(task -> {
                 setInProgress(false);
                 if (task.isSuccessful()) {
-                    String roomID = task.getResult().getId();
+                    roomId = task.getResult().getId();
                     // TODO: Navigate to receive roles
-                    Intent intent = new Intent(getApplicationContext(), ReceiveRolesActivity.class);
-                    AndroidUtil.passRoomModelAsIntent(intent, roomModel, roomID);
-                    startActivity(intent);
+                    navigateToReceiveRoles();
                 }
             });
         } else {
@@ -94,6 +92,13 @@ public class ChooseRolesActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void navigateToReceiveRoles(){
+        Intent intent = new Intent(getApplicationContext(), ReceiveRolesActivity.class);
+        AndroidUtil.passRoomModelAsIntent(intent, roomModel, roomId);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
     private void removeWolf() {

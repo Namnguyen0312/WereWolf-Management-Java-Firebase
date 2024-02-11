@@ -26,7 +26,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/edt_text_rounded_corner"
-            android:backgroundTint="@color/my_secondary"
             android:elevation="5dp"
             android:hint="Enter Name"
             android:padding="3dp" />
@@ -45,7 +44,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/edt_text_rounded_corner"
-            android:backgroundTint="@color/my_secondary"
             android:elevation="5dp"
             android:hint="Enter Number"
             android:inputType="number"
