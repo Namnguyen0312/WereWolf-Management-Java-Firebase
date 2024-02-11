@@ -3,5 +3,6 @@
     <string-array name="roles">
         <item>Wolf</item>
         <item>Villager</item>
+        <item>Shield</item>
     </string-array>
 </resources>

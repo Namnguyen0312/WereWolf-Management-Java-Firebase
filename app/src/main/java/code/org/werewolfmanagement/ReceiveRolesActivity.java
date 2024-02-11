@@ -20,6 +20,7 @@ import java.util.Random;
 
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
+import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
 
 public class ReceiveRolesActivity extends AppCompatActivity {
@@ -29,14 +30,13 @@ public class ReceiveRolesActivity extends AppCompatActivity {
     private Button nextPlayerBtn;
     private ProgressBar receiveRoleProgressBar;
     private RoomModel roomModel;
-    private PlayerModel playerModel;
 
-    private int count = 1;
+    private int countPlayerId = 1;
     private String roomId;
     private Random random = new Random();
     private String randomValue;
 
-    private int countWolf = 1, countVillager = 1;
+    private int countWolf = 0, countVillager = 0, countShield = 0;
 
 
     @Override
@@ -53,87 +53,94 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     private void setRoles(){
         // TODO: Set player one
-        playerTxt.setText("Player " + count);
+        playerTxt.setText("Player " + countPlayerId);
         String[] rolesArray = getApplicationContext().getResources().getStringArray(R.array.roles);
-
 
         ArrayList<String> rolesList = new ArrayList<>(java.util.Arrays.asList(rolesArray));
 
-        if(roomModel.getValueOfWolf() < countWolf){
+        if(roomModel.getValueOfWolf() == countWolf){
             rolesList.remove("Wolf");
-            randomValue = rolesList.get(random.nextInt(rolesList.size()));
-            Log.i("array", randomValue);
-        } else if (roomModel.getValueOfVillager() < countVillager) {
+        }if (roomModel.getValueOfVillager() == countVillager) {
             rolesList.remove("Villager");
-            randomValue = rolesList.get(random.nextInt(rolesList.size()));
-            Log.i("array", randomValue);
-        } else {
-            randomValue = rolesList.get(random.nextInt(rolesList.size()));
-            Log.i("array", randomValue);
+        }if (roomModel.getValueOfShield() == countShield) {
+            rolesList.remove("Shield");
         }
 
+        Log.i("valueOfWolf", String.valueOf(roomModel.getValueOfWolf()));
+        Log.i("valueOfVillager", String.valueOf(roomModel.getValueOfVillager()));
+        Log.i("valueOfShield", String.valueOf(roomModel.getValueOfShield()));
+
+        randomValue = rolesList.get(random.nextInt(rolesList.size()));
 
         if (randomValue.equals("Wolf")) {
             roleImg.setImageResource(R.drawable.werewolf_icon);
             roleNameTxt.setText("Wolf");
             countWolf++;
-            Log.i("array", String.valueOf(countWolf));
+            Log.i("randomValue", randomValue);
+            Log.i("countWolf", String.valueOf(countWolf));
 
-        } else {
+        } else if (randomValue.equals("Villager")) {
             roleImg.setImageResource(R.drawable.villager_icon);
             roleNameTxt.setText("Villager");
             countVillager++;
-            Log.i("array", String.valueOf(countVillager));
-
+            Log.i("randomValue", randomValue);
+            Log.i("countVillager", String.valueOf(countVillager));
+        }else {
+            roleImg.setImageResource(R.drawable.shield_icon);
+            roleNameTxt.setText("Shield");
+            countShield++;
+            Log.i("randomValue", randomValue);
+            Log.i("countShield", String.valueOf(countShield));
         }
+
+
+
         /**
          * Dua du lieu player len firebase
          */
         setPlayersToFirebase();
-        count++;
+        countPlayerId++;
     }
 
 
 
 
     private void receiveRole() {
-        roomId = FirebaseUtil.roomId;
-        FirebaseUtil.getRoomWithIdReference(roomId).get().addOnCompleteListener(task -> {
-            roomModel = task.getResult().toObject(RoomModel.class);
-            String name = roomModel.getName();
-            nameRoomTxt.setText(name);
-            /**
-             * Nhan role player 1
-             */
-            setRoles();
+        roomModel = AndroidUtil.getRoomModelFromIntent(getIntent());
+        roomId = roomModel.getRoomId();
+        String name = roomModel.getName();
+        nameRoomTxt.setText(name);
+        /**
+         * Nhan role player 1
+         */
+        setRoles();
 
-            /**
-             * Nhan cac role tiep theo
-             */
-            nextPlayerBtn.setOnClickListener(v -> {
+        /**
+         * Nhan cac role tiep theo
+         */
+        nextPlayerBtn.setOnClickListener(v -> {
 
-                if(count > roomModel.getNumberOfPlayer()){
-                    // TODO: Chuyen toi man hinh choi game
-                    navigateToGame();
-                }else{
-                    setRoles();
+            if(countPlayerId > roomModel.getNumberOfPlayer()){
+                // TODO: Chuyen toi man hinh choi game
+                navigateToGame();
+            }else{
+                setRoles();
+            }
 
-                }
-
-            });
         });
 
     }
 
     private void setPlayersToFirebase(){
         setInProgress(true);
-        FirebaseUtil.getPlayerReference(FirebaseUtil.roomId).add(new PlayerModel("Player"+ count, randomValue)).addOnCompleteListener(task -> {
+        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel("Player"+ countPlayerId, randomValue)).addOnCompleteListener(task -> {
             setInProgress(false);
         });
     }
 
     private void navigateToGame() {
         Intent intent = new Intent(getApplicationContext(), InGameActivity.class);
+        AndroidUtil.passRoomModelAsIntent(intent, roomModel, roomId);
         startActivity(intent);
     }
 

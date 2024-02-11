@@ -6,16 +6,18 @@ public class RoomModel {
     private String name;
     private Timestamp createdTimestamp;
     private int numberOfPlayer;
-    private int valueOfWolf, valueOfVillager;
+    private int valueOfWolf, valueOfVillager, valueOfShield;
+    private String roomId;
     public RoomModel() {
     }
 
-    public RoomModel(String name, Timestamp createdTimestamp, int numberOfPlayer, int valueOfWolf, int valueOfVillager) {
+    public RoomModel(String name, Timestamp createdTimestamp, int numberOfPlayer, int valueOfWolf, int valueOfVillager, int valueOfShield) {
         this.name = name;
         this.createdTimestamp = createdTimestamp;
         this.numberOfPlayer = numberOfPlayer;
         this.valueOfWolf = valueOfWolf;
         this.valueOfVillager = valueOfVillager;
+        this.valueOfShield = valueOfShield;
     }
 
     public String getName() {
@@ -58,4 +60,19 @@ public class RoomModel {
         this.valueOfVillager = valueOfVillager;
     }
 
+    public int getValueOfShield() {
+        return valueOfShield;
+    }
+
+    public void setValueOfShield(int valueOfShield) {
+        this.valueOfShield = valueOfShield;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
 }

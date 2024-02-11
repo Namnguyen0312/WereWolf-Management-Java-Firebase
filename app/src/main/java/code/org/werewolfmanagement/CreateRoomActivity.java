@@ -33,40 +33,6 @@ public class CreateRoomActivity extends AppCompatActivity {
         });
     }
 
-//    private void setRoom() {
-//        setInProgress(true);
-//        String roomId = FirebaseUtil.getChatRoomId();
-//
-//        String nameRoom = nameRoomEdt.getText().toString();
-////        if(nameRoom.isEmpty()){
-////            nameRoomEdt.setError("Please Enter Name");
-////        }
-//
-//        String number = numberEdt.getText().toString();
-//
-////        if(number.isEmpty()){
-////            numberEdt.setError("Number of  player at least 3 people");
-////        }
-//
-//
-//        if (roomModel != null) {
-//            roomModel.setName(nameRoom);
-//            roomModel.setNumberOfPlayer(number);
-//        } else {
-//            roomModel = new RoomModel(nameRoom, roomId, Timestamp.now(), number);
-//        }
-//
-//        FirebaseUtil.getRoomReference(roomId).set(roomModel).addOnCompleteListener(task -> {
-//            setInProgress(false);
-//            if (task.isSuccessful()) {
-//                // TODO: Navigate to choose roles
-//                navigateChooseRole();
-//
-//            }
-//        });
-//
-//    }
-
     private void navigateChooseRole() {
         Intent intent = new Intent(this, ChooseRolesActivity.class);
         intent.putExtra("name", nameRoomEdt.getText().toString());
@@ -74,15 +40,6 @@ public class CreateRoomActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void setInProgress(boolean inProgress) {
-//        if (inProgress) {
-//            createRoomProgressBar.setVisibility(View.VISIBLE);
-//            nextBtn.setVisibility(View.GONE);
-//        } else {
-//            createRoomProgressBar.setVisibility(View.GONE);
-//            nextBtn.setVisibility(View.VISIBLE);
-//        }
-//    }
 
     public void initView() {
         nameRoomEdt = findViewById(R.id.nameRoomEdt);

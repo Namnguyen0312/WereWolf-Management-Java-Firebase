@@ -9,11 +9,6 @@ import java.util.UUID;
 
 public class FirebaseUtil {
 
-    public static String roomId;
-
-    public static void getRoomId(String id){
-        roomId = id;
-    }
 
     public static CollectionReference getRoomReference(){
         return FirebaseFirestore.getInstance().collection("rooms");

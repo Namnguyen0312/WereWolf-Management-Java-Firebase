@@ -19,11 +19,11 @@ import code.org.werewolfmanagement.utils.FirebaseUtil;
 
 public class ChooseRolesActivity extends AppCompatActivity {
 
-    private TextView countWolfTxt, countVillagerTxt, maxPlayerTxt;
-    private ImageView removeWolfBtn, addWolfBtn, removeVillagerBtn, addVillagerBtn;
+    private TextView countWolfTxt, countVillagerTxt, countShieldTxt,maxPlayerTxt;
+    private ImageView removeWolfBtn, addWolfBtn, removeVillagerBtn, addVillagerBtn, removeShieldBtn, addShieldBtn;
     private Button playBtn;
     private ProgressBar chooseRoleProgressBar;
-    private int countWolfInt, countVillagerInt, numberOfPlayerInt;
+    private int countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt;
     private String nameRoom, numberOfPlayer;
     private RoomModel roomModel;
 
@@ -60,6 +60,14 @@ public class ChooseRolesActivity extends AppCompatActivity {
             addVillager();
         });
 
+        removeShieldBtn.setOnClickListener(v -> {
+            removeShield();
+        });
+
+        addShieldBtn.setOnClickListener(v -> {
+            addShield();
+        });
+
         playBtn.setOnClickListener(v -> {
             setRoom();
         });
@@ -68,15 +76,16 @@ public class ChooseRolesActivity extends AppCompatActivity {
 
     private void setRoom() {
 
-        roomModel = new RoomModel(nameRoom, Timestamp.now(), numberOfPlayerInt, countWolfInt, countVillagerInt);
-        if (AndroidUtil.isEqualSumWolfAndVillager(countWolfInt, countVillagerInt, numberOfPlayerInt)) {
+        roomModel = new RoomModel(nameRoom, Timestamp.now(), numberOfPlayerInt, countWolfInt, countVillagerInt, countShieldInt);
+        if (AndroidUtil.isEqualSumAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt)) {
             setInProgress(true);
             FirebaseUtil.getRoomReference().add(roomModel).addOnCompleteListener(task -> {
                 setInProgress(false);
                 if (task.isSuccessful()) {
-                    FirebaseUtil.getRoomId(task.getResult().getId());
+                    String roomID = task.getResult().getId();
                     // TODO: Navigate to receive roles
-                    Intent intent = new Intent(this, ReceiveRolesActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), ReceiveRolesActivity.class);
+                    AndroidUtil.passRoomModelAsIntent(intent, roomModel, roomID);
                     startActivity(intent);
                 }
             });
@@ -98,7 +107,7 @@ public class ChooseRolesActivity extends AppCompatActivity {
 
     private void addWolf() {
         countWolfInt = AndroidUtil.parseInt(countWolfTxt.getText().toString());
-        if (AndroidUtil.isMoreThanSumWolfAndVillager(countWolfInt, countVillagerInt, numberOfPlayerInt)) {
+        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt)) {
         } else {
             countWolfInt++;
             countWolfTxt.setText(String.valueOf(countWolfInt));
@@ -116,21 +125,42 @@ public class ChooseRolesActivity extends AppCompatActivity {
 
     private void addVillager() {
         countVillagerInt = AndroidUtil.parseInt(countVillagerTxt.getText().toString());
-        if (AndroidUtil.isMoreThanSumWolfAndVillager(countWolfInt, countVillagerInt, numberOfPlayerInt)) {
+        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt)) {
         } else {
             countVillagerInt++;
             countVillagerTxt.setText(String.valueOf(countVillagerInt));
         }
     }
 
+    private void removeShield() {
+        countShieldInt = AndroidUtil.parseInt(countShieldTxt.getText().toString());
+        if (countShieldInt == 0) {
+        } else {
+            countShieldInt--;
+            countShieldTxt.setText(String.valueOf(countShieldInt));
+        }
+    }
+
+    private void addShield() {
+        countShieldInt = AndroidUtil.parseInt(countShieldTxt.getText().toString());
+        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt) || countShieldInt == 1) {
+        } else {
+            countShieldInt++;
+            countShieldTxt.setText(String.valueOf(countShieldInt));
+        }
+    }
+
     private void initView() {
         countWolfTxt = findViewById(R.id.countWolfTxt);
         countVillagerTxt = findViewById(R.id.countVillagerTxt);
+        countShieldTxt = findViewById(R.id.countShieldTxt);
         playBtn = findViewById(R.id.playBtn);
         removeWolfBtn = findViewById(R.id.removeWolfBtn);
         addWolfBtn = findViewById(R.id.addWolfBtn);
         removeVillagerBtn = findViewById(R.id.removeVillagerBtn);
         addVillagerBtn = findViewById(R.id.addVillagerBtn);
+        removeShieldBtn = findViewById(R.id.removeShieldBtn);
+        addShieldBtn = findViewById(R.id.addShieldBtn);
         chooseRoleProgressBar = findViewById(R.id.progressBar);
         maxPlayerTxt = findViewById(R.id.maxPlayerTxt);
     }
