@@ -29,6 +29,14 @@ public class InGameActivity extends AppCompatActivity {
 
         setDataToFragment();
 
+        setDayOne();
+
+
+
+
+    }
+
+    private void setDayOne(){
         AndroidUtil.getFragmentManagerAndSetAnim(getSupportFragmentManager(), R.id.dayScr, dayFragment, R.anim.fade_in, R.anim.fade_out);
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -37,8 +45,8 @@ public class InGameActivity extends AppCompatActivity {
             }
         }, 3000);
 
-
     }
+
 
     private void setDataToFragment() {
         Bundle bundle = new Bundle();

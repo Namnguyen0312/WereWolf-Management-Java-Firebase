@@ -9,52 +9,42 @@
     tools:context=".DayFragment">
 
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/nameRoomDayTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="100">
+        android:layout_gravity="center_vertical"
+        android:fontFamily="@font/bigelow_rules"
+        android:text="Name"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/nameRoomDayTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:fontFamily="@font/bigelow_rules"
-            android:text="Name"
-            android:textColor="@color/black"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:layout_weight="33"/>
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:src="@drawable/day_icon" />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/day_icon"
-            android:layout_weight="33"
-            android:layout_gravity="center_vertical"/>
-
-        <TextView
-            android:id="@+id/dayTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="end"
-            android:fontFamily="@font/bigelow_rules"
-            android:text="Day"
-            android:textColor="@color/black"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:layout_weight="33"/>
-
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/dayTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/bigelow_rules"
+        android:padding="10dp"
+        android:text="Day 1"
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="visible">
+
+
 
         <LinearLayout
             android:id="@+id/dayCallScr"
@@ -74,14 +64,13 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/dayActivityScr"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:id="@+id/dayActivityScr"
             android:orientation="vertical">
 
         </LinearLayout>
-
 
 
     </LinearLayout>

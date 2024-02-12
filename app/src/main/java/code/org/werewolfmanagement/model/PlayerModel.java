@@ -3,22 +3,22 @@ package code.org.werewolfmanagement.model;
 import java.io.Serializable;
 
 public class PlayerModel implements Serializable {
-    private String playerId;
+    private int playerId;
     private String role;
 
     public PlayerModel() {
     }
 
-    public PlayerModel(String playerId, String role) {
+    public PlayerModel(int playerId, String role) {
         this.playerId = playerId;
         this.role = role;
     }
 
-    public String getPlayerId() {
+    public int getPlayerId() {
         return playerId;
     }
 
-    public void setPlayerId(String playerId) {
+    public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
 

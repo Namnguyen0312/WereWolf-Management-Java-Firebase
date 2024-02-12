@@ -144,7 +144,7 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     private void setPlayersToFirebase() {
         setInProgress(true);
-        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel("Player" + countPlayerId, randomValue)).addOnCompleteListener(task -> {
+        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel(countPlayerId, randomValue)).addOnCompleteListener(task -> {
             setInProgress(false);
         });
     }
