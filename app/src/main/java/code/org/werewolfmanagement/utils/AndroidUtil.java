@@ -2,11 +2,24 @@ package code.org.werewolfmanagement.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import code.org.werewolfmanagement.model.RoomModel;
 
 public class AndroidUtil {
+
+    public static Animation getAnimation(Context context, int anim){
+        return AnimationUtils.loadAnimation(context, anim);
+    }
+
+    public static void getFragmentManagerAndSetAnim(FragmentManager fragmentManager, int containerId, Fragment fragment, int in, int out){
+        fragmentManager.beginTransaction().setCustomAnimations(in, out).replace(containerId, fragment).commit();
+    }
 
     public static void passRoomModelAsIntent(Intent intent, RoomModel model, String roomId){
         intent.putExtra("name", model.getName());

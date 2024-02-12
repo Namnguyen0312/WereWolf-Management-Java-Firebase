@@ -60,9 +60,9 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     private void setRoles() {
         // TODO: Set player one
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
+        animation = AndroidUtil.getAnimation(getApplicationContext(), R.anim.fade);
 
-        if(countPlayerId >= roomModel.getNumberOfPlayer()){
+        if (countPlayerId >= roomModel.getNumberOfPlayer()) {
             nextPlayerBtn.setText("Play");
         }
 
@@ -82,10 +82,6 @@ public class ReceiveRolesActivity extends AppCompatActivity {
             rolesList.remove("Shield");
         }
 
-        Log.i("valueOfWolf", String.valueOf(roomModel.getValueOfWolf()));
-        Log.i("valueOfVillager", String.valueOf(roomModel.getValueOfVillager()));
-        Log.i("valueOfShield", String.valueOf(roomModel.getValueOfShield()));
-
         randomValue = rolesList.get(random.nextInt(rolesList.size()));
 
         if (randomValue.equals("Wolf")) {
@@ -94,8 +90,6 @@ public class ReceiveRolesActivity extends AppCompatActivity {
             roleImg.startAnimation(animation);
             roleNameTxt.startAnimation(animation);
             countWolf++;
-            Log.i("randomValue", randomValue);
-            Log.i("countWolf", String.valueOf(countWolf));
 
         } else if (randomValue.equals("Villager")) {
             roleImg.setImageResource(R.drawable.villager_icon);
@@ -103,16 +97,12 @@ public class ReceiveRolesActivity extends AppCompatActivity {
             roleImg.startAnimation(animation);
             roleNameTxt.startAnimation(animation);
             countVillager++;
-            Log.i("randomValue", randomValue);
-            Log.i("countVillager", String.valueOf(countVillager));
         } else {
             roleImg.setImageResource(R.drawable.shield_icon);
             roleNameTxt.setText("Shield");
             roleImg.startAnimation(animation);
             roleNameTxt.startAnimation(animation);
             countShield++;
-            Log.i("randomValue", randomValue);
-            Log.i("countShield", String.valueOf(countShield));
         }
 
 

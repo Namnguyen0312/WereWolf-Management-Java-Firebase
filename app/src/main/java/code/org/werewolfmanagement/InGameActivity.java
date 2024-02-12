@@ -16,12 +16,9 @@ import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 
 public class InGameActivity extends AppCompatActivity {
-    private TextView nameRoomDayTxt, nameRoomNightTxt;
-    private LinearLayout dayScr, dayActivityScr, nightScr, nightActivityScr;
-    private RoomModel roomModel;
-    private PlayerModel playerModel;
-    private String roomId;
-    private Animation animation;
+    private DayFragment dayFragment;
+    private NightFragment nightFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,55 +27,33 @@ public class InGameActivity extends AppCompatActivity {
 
         initView();
 
-        setNameRoom();
+        setDataToFragment();
 
-        setDayOne();
-
-
-
-    }
-
-    private void setNameRoom() {
-        roomModel = AndroidUtil.getRoomModelFromIntent(getIntent());
-        roomId = roomModel.getRoomId();
-        String name = roomModel.getName();
-        nameRoomDayTxt.setText(name);
-        nameRoomNightTxt.setText(name);
-    }
-
-    private void setDayScr(){
-        dayScr.setVisibility(View.VISIBLE);
-        nightScr.setVisibility(View.GONE);
-        dayScr.startAnimation(animation);
-    }
-
-    private void setNightScr(){
-        dayScr.setVisibility(View.GONE);
-        nightScr.setVisibility(View.VISIBLE);
-        nightScr.startAnimation(animation);
-
-    }
-
-    private void setDayOne(){
-        animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
-
-        setDayScr();
+        AndroidUtil.getFragmentManagerAndSetAnim(getSupportFragmentManager(), R.id.dayScr, dayFragment, R.anim.fade_in, R.anim.fade_out);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
-                setNightScr();
+                AndroidUtil.getFragmentManagerAndSetAnim(getSupportFragmentManager(), R.id.dayScr, nightFragment, R.anim.fade_in, R.anim.fade_out);
             }
-        }, 5000);
+        }, 3000);
+
+
     }
 
-    private void initView(){
-        nameRoomDayTxt = findViewById(R.id.nameRoomDayTxt);
-        nameRoomNightTxt = findViewById(R.id.nameRoomNightTxt);
-        dayScr = findViewById(R.id.dayScr);
-        dayActivityScr = findViewById(R.id.dayActivityScr);
-        nightScr = findViewById(R.id.nightScr);
-        nightActivityScr = findViewById(R.id.nightActivityScr);
+    private void setDataToFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("roomModel", AndroidUtil.getRoomModelFromIntent(getIntent()));
+        dayFragment.setArguments(bundle);
+        nightFragment.setArguments(bundle);
+
+    }
+
+
+    private void initView() {
+
+        dayFragment = new DayFragment();
+        nightFragment = new NightFragment();
+
 
     }
 }

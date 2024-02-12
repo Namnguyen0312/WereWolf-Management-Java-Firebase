@@ -2,7 +2,9 @@ package code.org.werewolfmanagement.model;
 
 import com.google.firebase.Timestamp;
 
-public class RoomModel {
+import java.io.Serializable;
+
+public class RoomModel implements Serializable {
     private String name;
     private Timestamp createdTimestamp;
     private int numberOfPlayer;
