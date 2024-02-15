@@ -41,5 +41,5 @@
         android:text="Thực hiển bởi Nam Nguyễn CTU"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:textStyle="italic"/>
+        android:textStyle="italic" />
 </RelativeLayout>

@@ -2,14 +2,14 @@ package code.org.werewolfmanagement.model;
 
 import com.google.firebase.Timestamp;
 
-import java.io.Serializable;
 
-public class RoomModel implements Serializable {
+public class RoomModel {
     private String name;
     private Timestamp createdTimestamp;
     private int numberOfPlayer;
     private int valueOfWolf, valueOfVillager, valueOfShield;
     private String roomId;
+
     public RoomModel() {
     }
 
@@ -21,6 +21,7 @@ public class RoomModel implements Serializable {
         this.valueOfVillager = valueOfVillager;
         this.valueOfShield = valueOfShield;
     }
+
 
     public String getName() {
         return name;
@@ -78,3 +79,4 @@ public class RoomModel implements Serializable {
         this.roomId = roomId;
     }
 }
+

@@ -24,8 +24,7 @@
         android:layout_marginTop="70dp"
         android:text="Create a room"
         android:textColor="@color/black"
-        android:backgroundTint="@color/my_secondary"/>
-
+        android:backgroundTint="@color/my_secondary" />
 
 
 </LinearLayout>

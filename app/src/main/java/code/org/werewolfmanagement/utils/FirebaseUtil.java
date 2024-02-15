@@ -10,7 +10,7 @@ import java.util.UUID;
 public class FirebaseUtil {
 
 
-    public static CollectionReference getRoomReference(){
+    public static CollectionReference getRoomReference() {
         return FirebaseFirestore.getInstance().collection("rooms");
     }
 
@@ -18,7 +18,7 @@ public class FirebaseUtil {
         return FirebaseFirestore.getInstance().collection("rooms").document(roomId);
     }
 
-    public static CollectionReference getPlayerReference(String roomId){
+    public static CollectionReference getPlayerReference(String roomId) {
         return getRoomWithIdReference(roomId).collection("players");
     }
 }

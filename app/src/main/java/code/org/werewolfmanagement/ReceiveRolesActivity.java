@@ -58,8 +58,10 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Tạo ngẫu nhiên một Role trong các Role đã chọn trước đó ứng với từng player theo stt
+     */
     private void setRoles() {
-        // TODO: Set player one
         animation = AndroidUtil.getAnimation(getApplicationContext(), R.anim.fade);
 
         if (countPlayerId >= roomModel.getNumberOfPlayer()) {
@@ -105,14 +107,13 @@ public class ReceiveRolesActivity extends AppCompatActivity {
             countShield++;
         }
 
-
-        /**
-         * Dua du lieu player len firebase
-         */
         setPlayersToFirebase();
         countPlayerId++;
     }
 
+    /**
+     * Đặt tên phòng ứng với tên đã nhập
+     */
     private void setNameRoom() {
         roomModel = AndroidUtil.getRoomModelFromIntent(getIntent());
         roomId = roomModel.getRoomId();
@@ -120,20 +121,15 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         nameRoomTxt.setText(name);
     }
 
+    /**
+     * Thực hiện tạo role sau khi nhấn nextPlayerBtn
+     */
     private void receiveRole() {
-        /**
-         * Nhan role player 1
-         */
         setRoles();
-
-        /**
-         * Nhan cac role tiep theo
-         */
         nextPlayerBtn.setOnClickListener(v -> {
 
             if (countPlayerId > roomModel.getNumberOfPlayer()) {
-                // TODO: Chuyen toi man hinh choi game
-                navigateToGame();
+                navigateToInGameActivity();
             } else {
                 setRoles();
             }
@@ -142,6 +138,10 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Tạo từng player theo stt ứng với các role
+     * thêm từng player vào Firebase Firestore
+     */
     private void setPlayersToFirebase() {
         setInProgress(true);
         FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel(countPlayerId, randomValue)).addOnCompleteListener(task -> {
@@ -149,11 +149,29 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         });
     }
 
-    private void navigateToGame() {
+    /**
+     * Chuyển tới InGameActivity
+     */
+    private void navigateToInGameActivity() {
         Intent intent = new Intent(getApplicationContext(), InGameActivity.class);
         AndroidUtil.passRoomModelAsIntent(intent, roomModel, roomId);
         startActivity(intent);
         overridePendingTransition(R.anim.fade, R.anim.slide_out);
+    }
+
+    /**
+     * Chỉnh visibitly cho receiveRoleProgressBar và nextPlayerBtn
+     *
+     * @param inProgress kiểm tra xem có đang trong quá trình push lên Firebase hay không?
+     */
+    private void setInProgress(boolean inProgress) {
+        if (inProgress) {
+            receiveRoleProgressBar.setVisibility(View.VISIBLE);
+            nextPlayerBtn.setVisibility(View.GONE);
+        } else {
+            receiveRoleProgressBar.setVisibility(View.GONE);
+            nextPlayerBtn.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initView() {
@@ -165,13 +183,5 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         receiveRoleProgressBar = findViewById(R.id.progressBar);
     }
 
-    private void setInProgress(boolean inProgress) {
-        if (inProgress) {
-            receiveRoleProgressBar.setVisibility(View.VISIBLE);
-            nextPlayerBtn.setVisibility(View.GONE);
-        } else {
-            receiveRoleProgressBar.setVisibility(View.GONE);
-            nextPlayerBtn.setVisibility(View.VISIBLE);
-        }
-    }
+
 }

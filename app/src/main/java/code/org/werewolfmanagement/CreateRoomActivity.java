@@ -19,7 +19,6 @@ public class CreateRoomActivity extends AppCompatActivity {
 
     private EditText nameRoomEdt, numberEdt;
     private Button nextBtn;
-    private ProgressBar createRoomProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +32,24 @@ public class CreateRoomActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Truyền dữ liệu nhập vào gồm:tên phòng, số lượng người chơi
+     * Chuyển tới ChooseRolesActivity
+     */
     private void navigateChooseRole() {
         Intent intent = new Intent(this, ChooseRolesActivity.class);
-        intent.putExtra("name", nameRoomEdt.getText().toString());
-        intent.putExtra("numberOfPlayer", numberEdt.getText().toString());
-        startActivity(intent);
+        if (nameRoomEdt.getText().toString().equals("")) {
+            nameRoomEdt.setError("Name room can't empty");
+        } else {
+            intent.putExtra("name", nameRoomEdt.getText().toString());
+            if (numberEdt.getText().toString().equals("") || AndroidUtil.parseInt(numberEdt.getText().toString()) < 5) {
+                numberEdt.setError("The number of players is not less than 5");
+            } else {
+                intent.putExtra("numberOfPlayer", numberEdt.getText().toString());
+                startActivity(intent);
+            }
+        }
+
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
@@ -46,6 +58,5 @@ public class CreateRoomActivity extends AppCompatActivity {
         nameRoomEdt = findViewById(R.id.nameRoomEdt);
         numberEdt = findViewById(R.id.numberEdt);
         nextBtn = findViewById(R.id.nextBtn);
-        createRoomProgressBar = findViewById(R.id.progressBar);
     }
 }

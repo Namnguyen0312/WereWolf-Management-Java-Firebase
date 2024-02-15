@@ -14,7 +14,7 @@
         android:id="@+id/roleImg"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/werewolf_icon"
+        android:src="@drawable/villager_icon"
         app:tint="@color/my_secondary" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:fontFamily="@font/bigelow_rules"
         android:textStyle="bold"
         android:textColor="@color/my_secondary"
-        android:id="@+id/noPlayerTxt"/>
+        android:id="@+id/noPlayerTxt" />
 
 
 </LinearLayout>

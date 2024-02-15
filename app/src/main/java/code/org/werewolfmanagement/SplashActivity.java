@@ -13,6 +13,11 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+
+        /**
+         * Tạo activity loading cho app
+         * Chuyển tới CreateRoomActivity
+         */
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/dayFragment">
+
+    <fragment
+        android:id="@+id/dayFragment"
+        android:name="code.org.werewolfmanagement.DayFragment"
+        android:label="fragment_day"
+        tools:layout="@layout/fragment_day">
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="numberOfPlayer"
+            app:argType="integer" />
+        <argument
+            android:name="valueOfWolf"
+            app:argType="integer" />
+        <argument
+            android:name="valueOfVillager"
+            app:argType="integer" />
+        <argument
+            android:name="valueOfShield"
+            app:argType="integer" />
+        <argument
+            android:name="roomId"
+            app:argType="string" />
+        <argument
+            android:name="count"
+            app:argType="integer" />
+        <argument
+            android:name="countCall"
+            app:argType="integer" />
+        <action
+            android:id="@+id/navigateToNightFragment"
+            app:destination="@id/nightFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/nightFragment"
+        android:name="code.org.werewolfmanagement.NightFragment"
+        android:label="fragment_night"
+        tools:layout="@layout/fragment_night" >
+        <action
+            android:id="@+id/navigateToShieldFragment"
+            app:destination="@id/shieldFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/navigateToWolfFragment"
+            app:destination="@id/wolfFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/wolfFragment"
+        android:name="code.org.werewolfmanagement.WolfFragment"
+        android:label="fragment_wolf"
+        tools:layout="@layout/fragment_wolf" >
+        <action
+            android:id="@+id/navigateAgainWolfFragment"
+            app:destination="@id/nightFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/shieldFragment"
+        android:name="code.org.werewolfmanagement.ShieldFragment"
+        android:label="fragment_shield"
+        tools:layout="@layout/fragment_shield" >
+        <action
+            android:id="@+id/navigateFromShieldFragmentToNightFragment"
+            app:destination="@id/nightFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+</navigation>

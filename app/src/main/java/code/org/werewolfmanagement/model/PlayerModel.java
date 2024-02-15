@@ -1,8 +1,7 @@
 package code.org.werewolfmanagement.model;
 
-import java.io.Serializable;
 
-public class PlayerModel implements Serializable {
+public class PlayerModel{
     private int playerId;
     private String role;
 

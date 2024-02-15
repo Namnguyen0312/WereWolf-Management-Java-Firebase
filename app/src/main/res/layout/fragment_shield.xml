@@ -7,7 +7,7 @@
     android:background="@color/black"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".WolfFragment"
+    tools:context=".ShieldFragment"
     android:id="@+id/nightClick">
 
     <LinearLayout
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/bigelow_rules"
-        android:text="Night"
+        android:text="Night 1"
         android:textColor="@color/my_secondary"
         android:textSize="30dp"
         android:textStyle="bold" />
@@ -68,18 +68,18 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/bigelow_rules"
             android:gravity="center"
-            android:text="Who does the wolf want to bite tonight?"
+            android:text="Who does the shield want to protect tonight?"
             android:textColor="@color/my_secondary"
             android:textSize="30dp"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/biteBtn"
+            android:id="@+id/protectBtn"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/btn_rounded_corner"
-            android:text="The wolf wants to kill someone."
+            android:text="The shield wants to protect someone."
             android:textColor="@color/my_secondary" />
 
         <Button
@@ -89,7 +89,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/btn_rounded_corner"
             android:backgroundTint="@color/my_secondary"
-            android:text="The wolf doesn't kill anyone."
+            android:text="The shield doesn't protect anyone."
             android:textColor="@color/my_secondary" />
 
 
@@ -102,7 +102,7 @@
         android:layout_marginTop="30dp">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/wolfPlayerRecView"
+            android:id="@+id/shieldPlayerRecView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible" />

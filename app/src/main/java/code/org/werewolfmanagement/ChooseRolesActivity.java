@@ -19,11 +19,11 @@ import code.org.werewolfmanagement.utils.FirebaseUtil;
 
 public class ChooseRolesActivity extends AppCompatActivity {
 
-    private TextView countWolfTxt, countVillagerTxt, countShieldTxt,maxPlayerTxt;
+    private TextView countWolfTxt, countVillagerTxt, countShieldTxt, maxPlayerTxt;
     private ImageView removeWolfBtn, addWolfBtn, removeVillagerBtn, addVillagerBtn, removeShieldBtn, addShieldBtn;
     private Button playBtn;
     private ProgressBar chooseRoleProgressBar;
-    private int countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt;
+    private int countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt;
     private String nameRoom, numberOfPlayer, roomId;
     private RoomModel roomModel;
 
@@ -39,7 +39,9 @@ public class ChooseRolesActivity extends AppCompatActivity {
 
 
         nameRoom = getIntent().getExtras().getString("name");
+
         numberOfPlayer = getIntent().getExtras().getString("numberOfPlayer");
+
         numberOfPlayerInt = AndroidUtil.parseInt(numberOfPlayer);
 
         maxPlayerTxt.setText("Roles (Max " + numberOfPlayer + " Roles)");
@@ -74,10 +76,15 @@ public class ChooseRolesActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Tạo Room Model mới
+     * Kiểm tra xem số lượng role thêm vào có bằng số lượng người chơi không?
+     * Nếu bằng, thêm model vào Firebase FireStore
+     */
     private void setRoom() {
 
         roomModel = new RoomModel(nameRoom, Timestamp.now(), numberOfPlayerInt, countWolfInt, countVillagerInt, countShieldInt);
-        if (AndroidUtil.isEqualSumAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt)) {
+        if (AndroidUtil.isEqualSumAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt)) {
             setInProgress(true);
             FirebaseUtil.getRoomReference().add(roomModel).addOnCompleteListener(task -> {
                 setInProgress(false);
@@ -94,13 +101,20 @@ public class ChooseRolesActivity extends AppCompatActivity {
 
     }
 
-    private void navigateToReceiveRoles(){
+    /**
+     * Chuyển tới RecevieRolesActivity
+     */
+    private void navigateToReceiveRoles() {
         Intent intent = new Intent(getApplicationContext(), ReceiveRolesActivity.class);
         AndroidUtil.passRoomModelAsIntent(intent, roomModel, roomId);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
 
+    /**
+     * Giảm số lượng sói đi 1 sau khi nhấp vào dấu -
+     * không thể giảm quá 0
+     */
     private void removeWolf() {
         countWolfInt = AndroidUtil.parseInt(countWolfTxt.getText().toString());
         if (countWolfInt == 0) {
@@ -110,15 +124,22 @@ public class ChooseRolesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tăng số lượng sói lên 1 sau khi nhấp vào dấu +
+     */
     private void addWolf() {
         countWolfInt = AndroidUtil.parseInt(countWolfTxt.getText().toString());
-        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt)) {
+        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt)) {
         } else {
             countWolfInt++;
             countWolfTxt.setText(String.valueOf(countWolfInt));
         }
     }
 
+    /**
+     * Giảm số lượng dân đi 1 sau khi nhấp vào dấu -
+     * không thể giảm quá 0
+     */
     private void removeVillager() {
         countVillagerInt = AndroidUtil.parseInt(countVillagerTxt.getText().toString());
         if (countVillagerInt == 0) {
@@ -128,15 +149,22 @@ public class ChooseRolesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tăng số lượng dân lên 1 sau khi nhấp vào dấu +
+     */
     private void addVillager() {
         countVillagerInt = AndroidUtil.parseInt(countVillagerTxt.getText().toString());
-        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt)) {
+        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt)) {
         } else {
             countVillagerInt++;
             countVillagerTxt.setText(String.valueOf(countVillagerInt));
         }
     }
 
+    /**
+     * Giảm số lượng khiên đi 1 sau khi nhấp vào dấu -
+     * Không thể giảm quá 0
+     */
     private void removeShield() {
         countShieldInt = AndroidUtil.parseInt(countShieldTxt.getText().toString());
         if (countShieldInt == 0) {
@@ -146,12 +174,31 @@ public class ChooseRolesActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tăng số lượng khiên lên 1 sau khi nhấp vào dấu +
+     * tối đa 1 khiên trong game
+     */
     private void addShield() {
         countShieldInt = AndroidUtil.parseInt(countShieldTxt.getText().toString());
-        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt,numberOfPlayerInt) || countShieldInt == 1) {
+        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt) || countShieldInt == 1) {
         } else {
             countShieldInt++;
             countShieldTxt.setText(String.valueOf(countShieldInt));
+        }
+    }
+
+    /**
+     * Chỉnh visibitly cho Progressbar và playBtn
+     *
+     * @param inProgress kiểm tra xem có đang trong quá trình push lên Firebase hay không?
+     */
+    private void setInProgress(boolean inProgress) {
+        if (inProgress) {
+            chooseRoleProgressBar.setVisibility(View.VISIBLE);
+            playBtn.setVisibility(View.GONE);
+        } else {
+            chooseRoleProgressBar.setVisibility(View.GONE);
+            playBtn.setVisibility(View.VISIBLE);
         }
     }
 
@@ -170,14 +217,5 @@ public class ChooseRolesActivity extends AppCompatActivity {
         maxPlayerTxt = findViewById(R.id.maxPlayerTxt);
     }
 
-    private void setInProgress(boolean inProgress) {
-        if (inProgress) {
-            chooseRoleProgressBar.setVisibility(View.VISIBLE);
-            playBtn.setVisibility(View.GONE);
-        } else {
-            chooseRoleProgressBar.setVisibility(View.GONE);
-            playBtn.setVisibility(View.VISIBLE);
-        }
-    }
 
 }

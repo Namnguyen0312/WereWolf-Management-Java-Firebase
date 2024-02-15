@@ -19,7 +19,7 @@
             android:text="Roles"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:id="@+id/maxPlayerTxt"/>
+            android:id="@+id/maxPlayerTxt" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                     android:layout_height="90dp"
                     android:src="@drawable/werewolf_icon"
                     app:tint="@color/black"
-                    android:layout_marginTop="5dp"/>
+                    android:layout_marginTop="5dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -46,8 +46,7 @@
                     android:text="Wolf"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:layout_marginTop="5dp"
-                    />
+                    android:layout_marginTop="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -62,14 +61,14 @@
                         android:src="@drawable/remove_icon"
                         app:tint="@color/my_secondary"
                         android:layout_marginEnd="20dp"
-                        android:id="@+id/removeWolfBtn"/>
+                        android:id="@+id/removeWolfBtn" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textSize="30dp"
-                        android:id="@+id/countWolfTxt"/>
+                        android:id="@+id/countWolfTxt" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -77,7 +76,7 @@
                         android:src="@drawable/add_icon"
                         app:tint="@color/my_secondary"
                         android:layout_marginStart="20dp"
-                        android:id="@+id/addWolfBtn"/>
+                        android:id="@+id/addWolfBtn" />
 
                 </LinearLayout>
 
@@ -103,7 +102,7 @@
                     android:text="Villager"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,14 +117,14 @@
                         android:src="@drawable/remove_icon"
                         app:tint="@color/my_secondary"
                         android:layout_marginEnd="20dp"
-                        android:id="@+id/removeVillagerBtn"/>
+                        android:id="@+id/removeVillagerBtn" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textSize="30dp"
-                        android:id="@+id/countVillagerTxt"/>
+                        android:id="@+id/countVillagerTxt" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -133,7 +132,7 @@
                         android:src="@drawable/add_icon"
                         app:tint="@color/my_secondary"
                         android:layout_marginStart="20dp"
-                        android:id="@+id/addVillagerBtn"/>
+                        android:id="@+id/addVillagerBtn" />
 
                 </LinearLayout>
 
@@ -157,7 +156,7 @@
                     android:text="Shield"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,14 +171,14 @@
                         android:src="@drawable/remove_icon"
                         app:tint="@color/my_secondary"
                         android:layout_marginEnd="20dp"
-                        android:id="@+id/removeShieldBtn"/>
+                        android:id="@+id/removeShieldBtn" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
                         android:textSize="30dp"
-                        android:id="@+id/countShieldTxt"/>
+                        android:id="@+id/countShieldTxt" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -187,7 +186,7 @@
                         android:src="@drawable/add_icon"
                         app:tint="@color/my_secondary"
                         android:layout_marginStart="20dp"
-                        android:id="@+id/addShieldBtn"/>
+                        android:id="@+id/addShieldBtn" />
 
                 </LinearLayout>
 
@@ -203,7 +202,7 @@
             android:layout_marginTop="30dp"
             android:text="Play"
             android:textColor="@color/black"
-            android:backgroundTint="@color/my_secondary"/>
+            android:backgroundTint="@color/my_secondary" />
 
         <ProgressBar
             android:id="@+id/progressBar"

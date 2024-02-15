@@ -7,71 +7,65 @@
     android:background="@color/black"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".NightFragment">
+    tools:context=".NightFragment"
+    android:id="@+id/nightClick">
 
-
-    <TextView
-        android:id="@+id/nameRoomNightTxt"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:fontFamily="@font/bigelow_rules"
-        android:text="Name"
-        android:textColor="@color/my_secondary"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/back_icon"
+            app:tint="@color/my_secondary" />
+
+        <TextView
+            android:id="@+id/nameRoomNightTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/bigelow_rules"
+            android:text="Name"
+            android:textColor="@color/my_secondary"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_gravity="center"
         android:src="@drawable/night_icon"
-        app:tint="@color/my_secondary"
-        android:layout_gravity="center"/>
+        app:tint="@color/my_secondary" />
 
     <TextView
-        android:padding="10dp"
         android:id="@+id/nightTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/bigelow_rules"
-        android:text="Night 1"
+        android:padding="10dp"
+        android:text="Night"
         android:textColor="@color/my_secondary"
         android:textSize="30dp"
         android:textStyle="bold" />
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/callTxt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/nightCallScr"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/bigelow_rules"
-                android:text="Wolf, please wake up."
-                android:textColor="@color/my_secondary"
-                android:textSize="40dp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/nightActivityScr"
-            android:gravity="center"
-            android:visibility="visible">
-
-        </LinearLayout>
-
-    </LinearLayout>
+        android:fontFamily="@font/bigelow_rules"
+        android:gravity="center"
+        android:text="Text"
+        android:textColor="@color/my_secondary"
+        android:textSize="40dp"
+        android:textStyle="bold" />
 
 </LinearLayout>

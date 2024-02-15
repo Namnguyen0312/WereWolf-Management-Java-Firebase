@@ -2,13 +2,21 @@ package code.org.werewolfmanagement;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,13 +26,11 @@ import code.org.werewolfmanagement.utils.AndroidUtil;
 
 public class NightFragment extends Fragment {
 
-    private TextView nameRoomNightTxt, nightTxt;
-    private LinearLayout nightCallScr, nightActivityScr;
+    private LinearLayout nightClick;
+    private TextView nameRoomNightTxt, nightTxt, callTxt;
     private RoomModel roomModel;
-    private String roomId;
-    private int countNight = 0;
-    private WolfFragment wolfFragment;
-    private Bundle bundleFromInGameAct,bundleToWolfFragment;
+    private int countNight, countCall;
+
 
     public NightFragment() {
     }
@@ -36,45 +42,55 @@ public class NightFragment extends Fragment {
 
         initView(view);
 
-        getDataFromInGameActivity();
+        getDataFromDayFragment();
 
         setNameRoom();
 
         setNight();
 
-        setDataToFragmentChild();
+        setCall();
 
-        setNightCall();
+        nightClick.setOnClickListener(v -> {
+            setArgument();
+        });
 
         return view;
     }
 
-    private void setNightCall(){
-        setInActivity(false);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setInActivity(true);
-                AndroidUtil.getFragmentManagerAndSetAnim(getChildFragmentManager(), R.id.nightActivityScr, wolfFragment, R.anim.fade_in, R.anim.fade_out);
+    private void setArgument() {
+        Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countNight);
+        bundle.putInt("countCall", countCall);
+        if (roomModel.getValueOfShield() != 0){
+            if (countCall == 0){
+                NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+                navController.navigate(R.id.navigateToShieldFragment, bundle);
             }
-        },3000);
-    }
-
-    private void setDataToFragmentChild(){
-        bundleToWolfFragment = new Bundle();
-        bundleToWolfFragment.putSerializable("roomModel", roomModel);
-        wolfFragment.setArguments(bundleToWolfFragment);
-    }
-
-    private void setInActivity(boolean inActivity){
-        if (!inActivity) {
-            nightCallScr.setVisibility(View.VISIBLE);
-            nightActivityScr.setVisibility(View.GONE);
-        } else {
-            nightCallScr.setVisibility(View.GONE);
-            nightActivityScr.setVisibility(View.VISIBLE);
         }
+        if (roomModel.getValueOfWolf() != 0){
+            if (countCall == 1) {
+                NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+                navController.navigate(R.id.navigateToWolfFragment, bundle);
+            }
+        }
+
+
+    }
+
+    private void setCall(){
+        if (roomModel.getValueOfShield() != 0){
+            if(countCall == 0){
+                callTxt.setText("Shield, Please Wake Up");
+            }
+        }
+        else countCall++;
+        if (roomModel.getValueOfWolf() != 0){
+            if (countCall == 1) {
+                callTxt.setText("Wolf, Please Wake Up");
+            }
+        }
+        else countCall++;
+
     }
 
     private void setNight() {
@@ -86,37 +102,21 @@ public class NightFragment extends Fragment {
         nameRoomNightTxt.setText(name);
     }
 
-    private void getDataFromInGameActivity(){
-        bundleFromInGameAct = getArguments();
-        roomModel = (RoomModel) bundleFromInGameAct.getSerializable("roomModel");
-        roomId = roomModel.getRoomId();
+    private void getDataFromDayFragment() {
+        countNight = getArguments().getInt("count");
+        countCall = getArguments().getInt("countCall");
+        roomModel = AndroidUtil.getModelByArgument(getArguments());
     }
+
+//    public void navigateToShieldFragment() {
+//        AndroidUtil.getFragmentManagerAndSetAnim(getChildFragmentManager(), "ShieldFragment", R.id.nightActivityScr, shieldFragment, R.anim.fade_in, R.anim.fade_out);
+//    }
 
     public void initView(View view) {
         nameRoomNightTxt = view.findViewById(R.id.nameRoomNightTxt);
         nightTxt = view.findViewById(R.id.nightTxt);
-        nightCallScr = view.findViewById(R.id.nightCallScr);
-        nightActivityScr = view.findViewById(R.id.nightActivityScr);
-        wolfFragment = new WolfFragment();
+        nightClick = view.findViewById(R.id.nightClick);
+        callTxt = view.findViewById(R.id.callTxt);
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        countNight++;
-        Log.d("FragmentcountNight", "Fragment created. countNight: " + countNight);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        countNight = countNight;
-        Log.d("FragmentcountNight", "Fragment resumed. countNight: " + countNight);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("FragmentcountNight", "Fragment paused. countNight: " + countNight);
-    }
 }
