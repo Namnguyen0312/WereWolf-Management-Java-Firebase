@@ -92,6 +92,17 @@
         tools:layout="@layout/fragment_dead" >
         <action
             android:id="@+id/navigateFromDeadFragmentToHangFragment"
+            app:destination="@id/discussFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/discussFragment"
+        android:name="code.org.werewolfmanagement.DiscussFragment"
+        android:label="fragment_discuss"
+        tools:layout="@layout/fragment_discuss" >
+        <action
+            android:id="@+id/navigateFromDiscussFragmentToHangFragment"
             app:destination="@id/hangFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
@@ -100,5 +111,21 @@
         android:id="@+id/hangFragment"
         android:name="code.org.werewolfmanagement.HangFragment"
         android:label="fragment_hang"
-        tools:layout="@layout/fragment_hang" />
+        tools:layout="@layout/fragment_hang" >
+        <action
+            android:id="@+id/navigateFromHangFragmentToNightFragment"
+            app:destination="@id/nightFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/navigateFromHangFragmentToEndGameFragment"
+            app:destination="@id/endGameFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/endGameFragment"
+        android:name="code.org.werewolfmanagement.EndGameFragment"
+        android:label="fragment_end_game"
+        tools:layout="@layout/fragment_end_game" />
 </navigation>

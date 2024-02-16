@@ -26,7 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-import code.org.werewolfmanagement.adapter.DayPlayerRoleRecViewAdapter;
+import code.org.werewolfmanagement.adapter.DeadPlayerRoleRecViewAdapter;
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
@@ -39,7 +39,7 @@ public class DeadFragment extends Fragment {
     private LinearLayout layoutClick, deadScr, noOneDeadScr;
     private int countDay;
     private RecyclerView deadRecView;
-    private DayPlayerRoleRecViewAdapter  deadPlayerAdapter;
+    private DeadPlayerRoleRecViewAdapter  deadPlayerAdapter;
     private String roomId;
 
     private static final String TAG = "DeadFragment";
@@ -120,10 +120,18 @@ public class DeadFragment extends Fragment {
                                     FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                                             .setQuery(queryBitten, PlayerModel.class).build();
 
-                                    deadPlayerAdapter = new DayPlayerRoleRecViewAdapter(options, getContext());
+                                    deadPlayerAdapter = new DeadPlayerRoleRecViewAdapter(options, getContext());
                                     deadRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
                                     deadRecView.setAdapter(deadPlayerAdapter);
                                     deadPlayerAdapter.startListening();
+
+                                    if(documentSnapshot.getString("role").equals("Villager")){
+                                        roomModel.setValueOfVillager(roomModel.getValueOfVillager() - 1);
+                                        Log.d(TAG, "Villager" + roomModel.getValueOfVillager());
+                                    }else if (documentSnapshot.getString("role").equals("Shield")){
+                                        roomModel.setValueOfShield(roomModel.getValueOfShield() - 1);
+                                        Log.d(TAG, "Shield" + roomModel.getValueOfShield());
+                                    }
 
                                     Map<String, Object> updates = new HashMap<>();
                                     updates.put("dead", true);
@@ -139,7 +147,7 @@ public class DeadFragment extends Fragment {
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Error updating document", e);
+                                                    Log.w(TAG, "Error updating dead", e);
                                                 }
                                             });
 
@@ -170,5 +178,13 @@ public class DeadFragment extends Fragment {
         deadRecView = view.findViewById(R.id.deadRecView);
         deadScr = view.findViewById(R.id.deadScr);
         noOneDeadScr = view.findViewById(R.id.noOneDeadScr);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(deadPlayerAdapter!=null){
+            deadPlayerAdapter.notifyDataSetChanged();
+        }
     }
 }

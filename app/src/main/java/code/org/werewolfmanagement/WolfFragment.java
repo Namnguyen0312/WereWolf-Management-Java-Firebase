@@ -94,6 +94,7 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
     private void setUpOtherRoleRecView(){
         Query query = FirebaseUtil.getPlayerReference(roomId)
                 .whereNotEqualTo("role", "Wolf")
+                .whereEqualTo("dead", false)
                 .orderBy("playerId", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
@@ -108,6 +109,7 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
     private void setUpWolfPlayerRecView() {
         Query query = FirebaseUtil.getPlayerReference(roomId)
                 .whereEqualTo("role", "Wolf")
+                .whereEqualTo("dead", false)
                 .orderBy("playerId", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
@@ -184,5 +186,16 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
                 });
 
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(otherRoleAdapter!=null){
+            otherRoleAdapter.notifyDataSetChanged();
+        }
+        if(wolfAdapter!=null){
+            wolfAdapter.notifyDataSetChanged();
+        }
     }
 }

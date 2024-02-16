@@ -34,13 +34,14 @@ import code.org.werewolfmanagement.utils.FirebaseUtil;
 
 public class HangFragment extends Fragment {
 
-    private TextView nameRoomDayTxt, dayTxt;
+    private TextView nameRoomDayTxt, dayTxt, hangedPlayerTxt;
     private RoomModel roomModel;
     private LinearLayout layoutClick;
     private int countDay;
-    private RecyclerView hangRecView;
-    private DayPlayerRoleRecViewAdapter allPlayerAdapter;
+    private int playerId;
     private String roomId;
+
+    private static final String TAG = "HangFragment";
 
     public HangFragment() {
     }
@@ -58,24 +59,62 @@ public class HangFragment extends Fragment {
 
         setDay();
 
-        setUpHangPlayerRecView();
+        setHangedPlayer();
+
+        resetPlayer();
+
+
+        layoutClick.setOnClickListener(v -> {
+            if(roomModel.getValueOfWolf() == 0){
+                setArgumentToEndGameFragment();
+            }else {
+                setArgumentToNightFragment();
+            }
+        });
 
         return view;
     }
 
-    private void setUpHangPlayerRecView() {
-        Query query = FirebaseUtil.getPlayerReference(roomId)
-                .whereEqualTo("dead", false)
-                .orderBy("playerId", Query.Direction.ASCENDING);
+    private void resetPlayer() {
+        FirebaseUtil.getPlayerReference(roomId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Map<String, Object> updates = new HashMap<>();
+                            updates.put("bitten", false);
+                            updates.put("protected", false);
+                            FirebaseUtil.getPlayerWithIdReference(roomId, documentSnapshot.getId())
+                                    .update(updates)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d(TAG, "Successfully updated!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating reset", e);
+                                        }
+                                    });
+                            Log.d(TAG, "DocumentSnapshots successfully updated!");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
 
-        FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
-                .setQuery(query, PlayerModel.class).build();
 
-        allPlayerAdapter = new DayPlayerRoleRecViewAdapter(options, getContext());
-        hangRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        hangRecView.setAdapter(allPlayerAdapter);
-        allPlayerAdapter.startListening();
 
+    private void setHangedPlayer() {
+        hangedPlayerTxt.setText("Player " + playerId);
     }
 
     private void setDay() {
@@ -87,15 +126,24 @@ public class HangFragment extends Fragment {
         nameRoomDayTxt.setText(name);
     }
 
-    private void setArgument() {
+    private void setArgumentToNightFragment() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
         bundle.putInt("countCall", 0);
         NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
-        navController.navigate(R.id.navigateToNightFragment, bundle);
+        navController.navigate(R.id.navigateFromHangFragmentToNightFragment, bundle);
     }
+
+    private void setArgumentToEndGameFragment() {
+        Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
+        bundle.putInt("countCall", 0);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+        navController.navigate(R.id.navigateFromHangFragmentToEndGameFragment, bundle);
+    }
+    
 
     private void getData() {
         countDay = getArguments().getInt("count");
+        playerId = getArguments().getInt("playerId");
         roomModel = AndroidUtil.getModelByArgument(getArguments());
         roomId = roomModel.getRoomId();
     }
@@ -103,7 +151,10 @@ public class HangFragment extends Fragment {
     private void initView(View view) {
         nameRoomDayTxt = view.findViewById(R.id.nameRoomDayTxt);
         dayTxt = view.findViewById(R.id.dayTxt);
+        hangedPlayerTxt = view.findViewById(R.id.hangedPlayerTxt);
         layoutClick = view.findViewById(R.id.layoutClick);
-        hangRecView = view.findViewById(R.id.hangRecView);
     }
+
+
+
 }

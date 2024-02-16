@@ -25,6 +25,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import code.org.werewolfmanagement.adapter.NightPlayerRoleRecViewAdapter;
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
@@ -76,6 +79,7 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
 
 
 
+
         return view;
     }
 
@@ -97,6 +101,8 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
 
     private void setUpOtherRoleRecView(){
         Query query = FirebaseUtil.getPlayerReference(roomId)
+                .whereEqualTo("dead", false)
+                .whereEqualTo("protectedLastNight", false)
                 .orderBy("playerId", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
@@ -108,9 +114,50 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
         otherRoleAdapter.startListening();
     }
 
+    private void setProtectedLastNight(){
+        FirebaseUtil.getPlayerReference(roomId)
+                .whereEqualTo("protectedLastNight", true)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()){
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                Map<String, Object> updates = new HashMap<>();
+                                updates.put("protectedLastNight", false);
+
+
+                                FirebaseUtil.getPlayerWithIdReference(roomId, documentSnapshot.getId())
+                                        .update(updates)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.d(TAG, "Successfully updated!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error updating dead", e);
+                                            }
+                                        });
+                                Log.d(TAG, "DocumentSnapshots successfully updated!");
+                            }
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
     private void setUpshieldPlayerRecView() {
         Query query = FirebaseUtil.getPlayerReference(roomId)
                 .whereEqualTo("role", "Shield")
+                .whereEqualTo("dead", false)
                 .orderBy("playerId", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
@@ -151,8 +198,11 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
 
     @Override
     public void onItemClick(int position) {
+        setProtectedLastNight();
         protectedPlayer = otherRoleAdapter.getItem(position);
         protectedPlayer.setProtected(true);
+        protectedPlayer.setProtectedLastNight(true);
+        otherRoleAdapter.stopListening();
         FirebaseUtil.getPlayerReference(roomId)
                 .whereEqualTo("playerId", protectedPlayer.getPlayerId())
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -184,5 +234,17 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
                         Log.w(TAG, "Error updating document", e);
                     }
                 });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(otherRoleAdapter!=null){
+            otherRoleAdapter.notifyDataSetChanged();
+        }
+        if(shieldAdapter!=null){
+            shieldAdapter.notifyDataSetChanged();
+        }
     }
 }
