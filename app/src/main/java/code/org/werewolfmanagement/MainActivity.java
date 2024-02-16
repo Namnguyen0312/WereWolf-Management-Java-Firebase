@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
         initView();
 
         createBtn.setOnClickListener(v -> {
-            // TODO: navigate to create room
             navigateCreateRoom();
         });
     }

@@ -21,4 +21,12 @@ public class FirebaseUtil {
     public static CollectionReference getPlayerReference(String roomId) {
         return getRoomWithIdReference(roomId).collection("players");
     }
+
+    public static DocumentReference getPlayerWithIdReference(String roomId, String playerId) {
+        return getRoomWithIdReference(roomId).collection("players").document(playerId);
+    }
+
+    public static CollectionReference getNightReference(String roomId) {
+        return getRoomWithIdReference(roomId).collection("night");
+    }
 }

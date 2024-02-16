@@ -4,18 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -144,7 +138,7 @@ public class ReceiveRolesActivity extends AppCompatActivity {
      */
     private void setPlayersToFirebase() {
         setInProgress(true);
-        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel(countPlayerId, randomValue)).addOnCompleteListener(task -> {
+        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel(countPlayerId, randomValue, false, false, false)).addOnCompleteListener(task -> {
             setInProgress(false);
         });
     }
@@ -169,8 +163,8 @@ public class ReceiveRolesActivity extends AppCompatActivity {
             receiveRoleProgressBar.setVisibility(View.VISIBLE);
             nextPlayerBtn.setVisibility(View.GONE);
         } else {
-            receiveRoleProgressBar.setVisibility(View.GONE);
             nextPlayerBtn.setVisibility(View.VISIBLE);
+            receiveRoleProgressBar.setVisibility(View.GONE);
         }
     }
 

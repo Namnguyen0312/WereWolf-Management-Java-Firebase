@@ -3,6 +3,7 @@ package code.org.werewolfmanagement;
 import android.os.Bundle;
 
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,25 +19,32 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import code.org.werewolfmanagement.adapter.PlayerRoleRecViewAdapter;
+import code.org.werewolfmanagement.adapter.NightPlayerRoleRecViewAdapter;
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
 
-public class ShieldFragment extends Fragment implements PlayerRoleRecViewAdapter.OnItemClickListener {
+public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAdapter.OnItemClickListener {
     private Button protectBtn;
     private TextView nameRoomNightTxt, nightTxt;
     private RecyclerView shieldPlayerRecView, otherPlayerRecView;
-    private PlayerRoleRecViewAdapter shieldAdapter, otherRoleAdapter;
+    private NightPlayerRoleRecViewAdapter shieldAdapter, otherRoleAdapter;
 
     private RoomModel roomModel;
+    private PlayerModel protectedPlayer;
+
     private String roomId;
 
     private int countNight, countCall;
 
+    private static final String TAG = "ShieldFragment";
 
     public ShieldFragment() {
     }
@@ -94,7 +102,7 @@ public class ShieldFragment extends Fragment implements PlayerRoleRecViewAdapter
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        otherRoleAdapter = new PlayerRoleRecViewAdapter(options, getContext(), this);
+        otherRoleAdapter = new NightPlayerRoleRecViewAdapter(options, getContext(), this);
         otherPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         otherPlayerRecView.setAdapter(otherRoleAdapter);
         otherRoleAdapter.startListening();
@@ -108,7 +116,7 @@ public class ShieldFragment extends Fragment implements PlayerRoleRecViewAdapter
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        shieldAdapter = new PlayerRoleRecViewAdapter(options, getContext());
+        shieldAdapter = new NightPlayerRoleRecViewAdapter(options, getContext());
         shieldPlayerRecView.setLayoutManager(new LinearLayoutManager(getContext()));
         shieldPlayerRecView.setAdapter(shieldAdapter);
         shieldAdapter.startListening();
@@ -133,8 +141,8 @@ public class ShieldFragment extends Fragment implements PlayerRoleRecViewAdapter
 
     private void btnClick(boolean isClick){
         if(isClick){
-            shieldPlayerRecView.setVisibility(View.GONE);
             otherPlayerRecView.setVisibility(View.VISIBLE);
+            shieldPlayerRecView.setVisibility(View.GONE);
         }else {
             shieldPlayerRecView.setVisibility(View.VISIBLE);
             otherPlayerRecView.setVisibility(View.GONE);
@@ -142,27 +150,39 @@ public class ShieldFragment extends Fragment implements PlayerRoleRecViewAdapter
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        countNight++;
-        Log.d("FragmentcountNight", "Fragment created. countNight: " + countNight);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        countNight = countNight;
-        Log.d("FragmentcountNight", "Fragment resumed. countNight: " + countNight);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d("FragmentcountNight", "Fragment paused. countNight: " + countNight);
-    }
-
-    @Override
     public void onItemClick(int position) {
-        setArgument();
+        protectedPlayer = otherRoleAdapter.getItem(position);
+        protectedPlayer.setProtected(true);
+        FirebaseUtil.getPlayerReference(roomId)
+                .whereEqualTo("playerId", protectedPlayer.getPlayerId())
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String playerId = documentSnapshot.getId();
+                            FirebaseUtil.getPlayerWithIdReference(roomId, playerId).set(protectedPlayer)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d(TAG, "Player successfully updated!");
+                                            setArgument();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating player", e);
+                                        }
+                                    });
+                            Log.d(TAG, "DocumentSnapshots successfully updated!");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
     }
 }

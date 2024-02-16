@@ -39,6 +39,11 @@
             app:destination="@id/nightFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/navigateFromDayFragmentToDeadFragment"
+            app:destination="@id/deadFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
 
     </fragment>
     <fragment
@@ -64,8 +69,8 @@
         android:label="fragment_wolf"
         tools:layout="@layout/fragment_wolf" >
         <action
-            android:id="@+id/navigateAgainWolfFragment"
-            app:destination="@id/nightFragment"
+            android:id="@+id/navigateFromWolfFragmentToDayFragment"
+            app:destination="@id/dayFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
     </fragment>
@@ -80,4 +85,20 @@
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
     </fragment>
+    <fragment
+        android:id="@+id/deadFragment"
+        android:name="code.org.werewolfmanagement.DeadFragment"
+        android:label="fragment_dead"
+        tools:layout="@layout/fragment_dead" >
+        <action
+            android:id="@+id/navigateFromDeadFragmentToHangFragment"
+            app:destination="@id/hangFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/hangFragment"
+        android:name="code.org.werewolfmanagement.HangFragment"
+        android:label="fragment_hang"
+        tools:layout="@layout/fragment_hang" />
 </navigation>

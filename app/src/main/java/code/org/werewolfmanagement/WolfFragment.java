@@ -1,11 +1,9 @@
 package code.org.werewolfmanagement;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,30 +14,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import code.org.werewolfmanagement.adapter.PlayerRoleRecViewAdapter;
+import code.org.werewolfmanagement.adapter.NightPlayerRoleRecViewAdapter;
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
 
-public class WolfFragment extends Fragment implements PlayerRoleRecViewAdapter.OnItemClickListener {
+public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdapter.OnItemClickListener {
     private Button biteBtn;
     private TextView nameRoomNightTxt, nightTxt;
     private RecyclerView wolfPlayerRecView, otherPlayerRecView;
-    private PlayerRoleRecViewAdapter wolfAdapter, otherRoleAdapter;
+    private NightPlayerRoleRecViewAdapter wolfAdapter, otherRoleAdapter;
 
     private RoomModel roomModel;
+    private PlayerModel bittenPlayer;
     private String roomId;
 
     private int countNight, countCall;
 
+    private static final String TAG = "WolfFragment";
 
     public WolfFragment() {
     }
@@ -75,9 +77,9 @@ public class WolfFragment extends Fragment implements PlayerRoleRecViewAdapter.O
 
     private void setArgument() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countNight);
-        bundle.putInt("countCall", countCall + 1);
+        bundle.putInt("countCall", countCall);
         NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
-        navController.navigate(R.id.navigateAgainWolfFragment, bundle);
+        navController.navigate(R.id.navigateFromWolfFragmentToDayFragment, bundle);
     }
 
     private void setNameRoom() {
@@ -97,7 +99,7 @@ public class WolfFragment extends Fragment implements PlayerRoleRecViewAdapter.O
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        otherRoleAdapter = new PlayerRoleRecViewAdapter(options, getContext(), this);
+        otherRoleAdapter = new NightPlayerRoleRecViewAdapter(options, getContext(), this);
         otherPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         otherPlayerRecView.setAdapter(otherRoleAdapter);
         otherRoleAdapter.startListening();
@@ -111,7 +113,7 @@ public class WolfFragment extends Fragment implements PlayerRoleRecViewAdapter.O
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        wolfAdapter = new PlayerRoleRecViewAdapter(options, getContext());
+        wolfAdapter = new NightPlayerRoleRecViewAdapter(options, getContext());
         wolfPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         wolfPlayerRecView.setAdapter(wolfAdapter);
         wolfAdapter.startListening();
@@ -136,8 +138,8 @@ public class WolfFragment extends Fragment implements PlayerRoleRecViewAdapter.O
 
     private void btnClick(boolean isClick){
         if(isClick){
-            wolfPlayerRecView.setVisibility(View.GONE);
             otherPlayerRecView.setVisibility(View.VISIBLE);
+            wolfPlayerRecView.setVisibility(View.GONE);
         }else {
             wolfPlayerRecView.setVisibility(View.VISIBLE);
             otherPlayerRecView.setVisibility(View.GONE);
@@ -146,6 +148,41 @@ public class WolfFragment extends Fragment implements PlayerRoleRecViewAdapter.O
 
     @Override
     public void onItemClick(int position) {
-        setArgument();
+        bittenPlayer = otherRoleAdapter.getItem(position);
+        bittenPlayer.setBitten(true);
+        FirebaseUtil.getPlayerReference(roomId)
+                .whereEqualTo("playerId", bittenPlayer.getPlayerId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String playerId = documentSnapshot.getId();
+                            FirebaseUtil.getPlayerWithIdReference(roomId, playerId).set(bittenPlayer)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d(TAG, "Player successfully updated!");
+                                            setArgument();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating player", e);
+                                        }
+                                    });
+                            Log.d(TAG, "DocumentSnapshots successfully updated!");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+
+
     }
 }

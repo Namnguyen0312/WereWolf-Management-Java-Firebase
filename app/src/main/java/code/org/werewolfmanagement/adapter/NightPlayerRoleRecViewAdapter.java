@@ -16,18 +16,18 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import code.org.werewolfmanagement.R;
 import code.org.werewolfmanagement.model.PlayerModel;
 
-public class PlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, PlayerRoleRecViewAdapter.PlayerModelViewHolder> {
+public class NightPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, NightPlayerRoleRecViewAdapter.PlayerModelViewHolder> {
 
     private Context context;
     private OnItemClickListener listener;
 
-    public PlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
+    public NightPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
         super(options);
         this.context = context;
         this.listener = listener;
     }
 
-    public PlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context) {
+    public NightPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context) {
         super(options);
         this.context = context;
     }
@@ -59,7 +59,7 @@ public class PlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerMod
     @NonNull
     @Override
     public PlayerModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.player_role_rec_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.night_player_role_rec_row, parent, false);
         return new PlayerModelViewHolder(view);
     }
 

@@ -2,23 +2,15 @@ package code.org.werewolfmanagement;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
+
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import code.org.werewolfmanagement.model.RoomModel;
@@ -108,9 +100,6 @@ public class NightFragment extends Fragment {
         roomModel = AndroidUtil.getModelByArgument(getArguments());
     }
 
-//    public void navigateToShieldFragment() {
-//        AndroidUtil.getFragmentManagerAndSetAnim(getChildFragmentManager(), "ShieldFragment", R.id.nightActivityScr, shieldFragment, R.anim.fade_in, R.anim.fade_out);
-//    }
 
     public void initView(View view) {
         nameRoomNightTxt = view.findViewById(R.id.nameRoomNightTxt);

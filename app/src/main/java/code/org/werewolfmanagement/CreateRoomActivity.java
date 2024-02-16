@@ -4,16 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
-import com.google.firebase.Timestamp;
-
-import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
-import code.org.werewolfmanagement.utils.FirebaseUtil;
 
 public class CreateRoomActivity extends AppCompatActivity {
 
