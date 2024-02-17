@@ -83,18 +83,18 @@ public class ChooseRolesActivity extends AppCompatActivity {
     private void setRoom() {
 
         roomModel = new RoomModel(nameRoom, Timestamp.now(), numberOfPlayerInt, countWolfInt, countVillagerInt, countShieldInt);
-        if (AndroidUtil.isEqualSumAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt)) {
+        if (AndroidUtil.isEqualSumAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt) &&
+            !(AndroidUtil.isWolfMoreThanVillagers(countWolfInt, countVillagerInt, countShieldInt))) {
             setInProgress(true);
             FirebaseUtil.getRoomReference().add(roomModel).addOnCompleteListener(task -> {
                 setInProgress(false);
                 if (task.isSuccessful()) {
                     roomId = task.getResult().getId();
-                    // TODO: Navigate to receive roles
                     navigateToReceiveRoles();
                 }
             });
         } else {
-            AndroidUtil.showToast(this, "Not enough roles");
+            AndroidUtil.showToast(this, "Can't start game");
         }
 
 

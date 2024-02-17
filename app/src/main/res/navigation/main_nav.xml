@@ -91,8 +91,13 @@
         android:label="fragment_dead"
         tools:layout="@layout/fragment_dead" >
         <action
-            android:id="@+id/navigateFromDeadFragmentToHangFragment"
+            android:id="@+id/navigateFromDeadFragmentToDiscussFragment"
             app:destination="@id/discussFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/navigateFromDeadFragmentToEndGameFragment"
+            app:destination="@id/endGameFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
     </fragment>
@@ -104,6 +109,11 @@
         <action
             android:id="@+id/navigateFromDiscussFragmentToHangFragment"
             app:destination="@id/hangFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/navigateFromDiscussFragmentToNightFragment"
+            app:destination="@id/nightFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
     </fragment>

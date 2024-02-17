@@ -16,20 +16,16 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import code.org.werewolfmanagement.R;
 import code.org.werewolfmanagement.model.PlayerModel;
 
-public class DayPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, DayPlayerRoleRecViewAdapter.PlayerModelViewHolder> {
+public class ShieldProtectedRoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, ShieldProtectedRoleRecViewAdapter.PlayerModelViewHolder> {
 
     private Context context;
     private OnItemClickListener listener;
 
-    public DayPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
+
+    public ShieldProtectedRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
         super(options);
         this.context = context;
         this.listener = listener;
-    }
-
-    public DayPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context) {
-        super(options);
-        this.context = context;
     }
 
     @Override
@@ -43,6 +39,14 @@ public class DayPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Player
         }
         if (model.getRole().equals("Villager")) {
             holder.roleImg.setImageResource(R.drawable.villager_icon);
+        }
+
+        if (model.isProtectedLastNight()) {
+            holder.playerItemView.setEnabled(false);
+            holder.playerItemView.setBackgroundResource(R.drawable.protected_player_rounded_corner);
+        } else {
+            holder.playerItemView.setEnabled(true);
+            holder.playerItemView.setBackgroundResource(R.drawable.night_player_rounded_corner);
         }
 
         holder.itemView.setOnClickListener(v -> {
@@ -59,19 +63,22 @@ public class DayPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Player
     @NonNull
     @Override
     public PlayerModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.day_player_role_rec_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.night_player_role_rec_row, parent, false);
         return new PlayerModelViewHolder(view);
     }
+
 
     public class PlayerModelViewHolder extends RecyclerView.ViewHolder {
         private TextView noPlayerTxt;
         private ImageView roleImg;
 
+        private View playerItemView;
+
         public PlayerModelViewHolder(@NonNull View itemView) {
             super(itemView);
             noPlayerTxt = itemView.findViewById(R.id.noPlayerTxt);
             roleImg = itemView.findViewById(R.id.roleImg);
-
+            playerItemView = itemView;
         }
     }
 }

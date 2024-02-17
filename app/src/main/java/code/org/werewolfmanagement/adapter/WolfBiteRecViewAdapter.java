@@ -16,25 +16,22 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import code.org.werewolfmanagement.R;
 import code.org.werewolfmanagement.model.PlayerModel;
 
-public class NightPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, NightPlayerRoleRecViewAdapter.PlayerModelViewHolder> {
+public class WolfBiteRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, WolfBiteRecViewAdapter.PlayerModelViewHolder> {
 
     private Context context;
     private OnItemClickListener listener;
 
-    public NightPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
+
+    public WolfBiteRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
         super(options);
         this.context = context;
         this.listener = listener;
     }
 
-    public NightPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context) {
-        super(options);
-        this.context = context;
-    }
 
     @Override
     protected void onBindViewHolder(@NonNull PlayerModelViewHolder holder, int position, @NonNull PlayerModel model) {
-        holder.noPlayerTxt.setText("Player " + model.getPlayerId());
+        holder.noPlayerTxt.setText(model.getNamePlayer());
         if (model.getRole().equals("Wolf")) {
             holder.roleImg.setImageResource(R.drawable.werewolf_icon);
         }
@@ -63,15 +60,16 @@ public class NightPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Play
         return new PlayerModelViewHolder(view);
     }
 
+
     public class PlayerModelViewHolder extends RecyclerView.ViewHolder {
         private TextView noPlayerTxt;
         private ImageView roleImg;
+
 
         public PlayerModelViewHolder(@NonNull View itemView) {
             super(itemView);
             noPlayerTxt = itemView.findViewById(R.id.noPlayerTxt);
             roleImg = itemView.findViewById(R.id.roleImg);
-
         }
     }
 }

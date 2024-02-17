@@ -76,6 +76,10 @@ public class AndroidUtil {
         return Integer.parseInt(string);
     }
 
+    public static boolean isWolfMoreThanVillagers(int wolf, int villager , int shield){
+        if(wolf >= (villager + shield)) return true;
+        else  return false;
+    }
 
     public static boolean isMoreThanAllRoles(int wolf, int villager, int shield, int numberOfPlayer) {
         if ((wolf + villager + shield) < numberOfPlayer) return false;
@@ -86,6 +90,7 @@ public class AndroidUtil {
         if ((wolf + villager + shield) == numberOfPlayer) return true;
         return false;
     }
+
 
     /**
      * Dem so luong role khac nhau

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import code.org.werewolfmanagement.utils.FirebaseUtil;
 public class ReceiveRolesActivity extends AppCompatActivity {
 
     private TextView nameRoomTxt, playerTxt, roleNameTxt;
+    private EditText namePlayerEdtTxt;
     private ImageView roleImg;
     private Button nextPlayerBtn;
     private ProgressBar receiveRoleProgressBar;
@@ -31,6 +33,7 @@ public class ReceiveRolesActivity extends AppCompatActivity {
     private String roomId;
     private Random random = new Random();
     private String randomValue;
+    private String namePlayer;
 
     private int countWolf = 0, countVillager = 0, countShield = 0;
 
@@ -46,6 +49,8 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
         setNameRoom();
 
+        setRoles();
+
         setInProgress(false);
 
         receiveRole();
@@ -53,16 +58,42 @@ public class ReceiveRolesActivity extends AppCompatActivity {
     }
 
     /**
+     * Đặt tên phòng ứng với tên đã nhập
+     */
+    private void setNameRoom() {
+        roomModel = AndroidUtil.getRoomModelFromIntent(getIntent());
+        roomId = roomModel.getRoomId();
+        String name = roomModel.getName();
+        nameRoomTxt.setText(name);
+        playerTxt.setText("Player " + countPlayerId);
+
+    }
+
+
+    /**
+     * Thực hiện tạo role sau khi nhấn nextPlayerBtn
+     */
+    private void receiveRole() {
+        nextPlayerBtn.setOnClickListener(v -> {
+            if (namePlayerEdtTxt.getText().toString().equals("")) {
+                namePlayerEdtTxt.setError("Please Enter Name");
+            } else {
+                setPlayersToFirebase();
+            }
+        });
+    }
+
+    /**
      * Tạo ngẫu nhiên một Role trong các Role đã chọn trước đó ứng với từng player theo stt
      */
     private void setRoles() {
+
         animation = AndroidUtil.getAnimation(getApplicationContext(), R.anim.fade);
 
         if (countPlayerId >= roomModel.getNumberOfPlayer()) {
             nextPlayerBtn.setText("Play");
         }
 
-        playerTxt.setText("Player " + countPlayerId);
         playerTxt.startAnimation(animation);
         String[] rolesArray = getApplicationContext().getResources().getStringArray(R.array.roles);
 
@@ -100,36 +131,6 @@ public class ReceiveRolesActivity extends AppCompatActivity {
             roleNameTxt.startAnimation(animation);
             countShield++;
         }
-
-        setPlayersToFirebase();
-        countPlayerId++;
-    }
-
-    /**
-     * Đặt tên phòng ứng với tên đã nhập
-     */
-    private void setNameRoom() {
-        roomModel = AndroidUtil.getRoomModelFromIntent(getIntent());
-        roomId = roomModel.getRoomId();
-        String name = roomModel.getName();
-        nameRoomTxt.setText(name);
-    }
-
-    /**
-     * Thực hiện tạo role sau khi nhấn nextPlayerBtn
-     */
-    private void receiveRole() {
-        setRoles();
-        nextPlayerBtn.setOnClickListener(v -> {
-
-            if (countPlayerId > roomModel.getNumberOfPlayer()) {
-                navigateToInGameActivity();
-            } else {
-                setRoles();
-            }
-
-        });
-
     }
 
     /**
@@ -138,9 +139,20 @@ public class ReceiveRolesActivity extends AppCompatActivity {
      */
     private void setPlayersToFirebase() {
         setInProgress(true);
-        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel(countPlayerId, randomValue, false, false, false, false)).addOnCompleteListener(task -> {
+        FirebaseUtil.getPlayerReference(roomId).add(new PlayerModel(countPlayerId, namePlayerEdtTxt.getText().toString(), randomValue, false, false, false, false)).addOnCompleteListener(task -> {
             setInProgress(false);
         });
+
+        if (countPlayerId == roomModel.getNumberOfPlayer()) {
+            navigateToInGameActivity();
+        }else {
+            setRoles();
+            namePlayerEdtTxt.setText("");
+            countPlayerId++;
+            playerTxt.setText("Player " + countPlayerId);
+        }
+
+
     }
 
     /**
@@ -175,7 +187,9 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         roleImg = findViewById(R.id.roleImg);
         nextPlayerBtn = findViewById(R.id.nextPlayerBtn);
         receiveRoleProgressBar = findViewById(R.id.progressBar);
+        namePlayerEdtTxt = findViewById(R.id.namePlayerEdtTxt);
     }
+
 
 
 }

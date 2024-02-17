@@ -28,18 +28,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-import code.org.werewolfmanagement.adapter.NightPlayerRoleRecViewAdapter;
+import code.org.werewolfmanagement.adapter.ShieldProtectedRoleRecViewAdapter;
+import code.org.werewolfmanagement.adapter.RoleRecViewAdapter;
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
 
-public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAdapter.OnItemClickListener {
-    private Button protectBtn;
+public class ShieldFragment extends Fragment implements ShieldProtectedRoleRecViewAdapter.OnItemClickListener {
+    private Button protectBtn, nextBtn;
     private TextView nameRoomNightTxt, nightTxt;
     private RecyclerView shieldPlayerRecView, otherPlayerRecView;
-    private NightPlayerRoleRecViewAdapter shieldAdapter, otherRoleAdapter;
-
+    private RoleRecViewAdapter shieldAdapter;
+    private ShieldProtectedRoleRecViewAdapter otherRoleAdapter;
     private RoomModel roomModel;
     private PlayerModel protectedPlayer;
 
@@ -78,7 +79,9 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
         });
 
 
-
+        nextBtn.setOnClickListener(v -> {
+            setArgument();
+        });
 
         return view;
     }
@@ -102,14 +105,13 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
     private void setUpOtherRoleRecView(){
         Query query = FirebaseUtil.getPlayerReference(roomId)
                 .whereEqualTo("dead", false)
-                .whereEqualTo("protectedLastNight", false)
                 .orderBy("playerId", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        otherRoleAdapter = new NightPlayerRoleRecViewAdapter(options, getContext(), this);
-        otherPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        otherRoleAdapter = new ShieldProtectedRoleRecViewAdapter(options, getContext(), this);
+        otherPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         otherPlayerRecView.setAdapter(otherRoleAdapter);
         otherRoleAdapter.startListening();
     }
@@ -163,8 +165,8 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        shieldAdapter = new NightPlayerRoleRecViewAdapter(options, getContext());
-        shieldPlayerRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+        shieldAdapter = new RoleRecViewAdapter(options, getContext());
+        shieldPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         shieldPlayerRecView.setAdapter(shieldAdapter);
         shieldAdapter.startListening();
     }
@@ -176,16 +178,6 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
         roomId = roomModel.getRoomId();
     }
 
-
-    private void initView(View view) {
-        shieldPlayerRecView = view.findViewById(R.id.shieldPlayerRecView);
-        otherPlayerRecView = view.findViewById(R.id.otherPlayerRecView);
-
-        protectBtn = view.findViewById(R.id.protectBtn);
-        nameRoomNightTxt = view.findViewById(R.id.nameRoomNightTxt);
-        nightTxt = view.findViewById(R.id.nightTxt);
-    }
-
     private void btnClick(boolean isClick){
         if(isClick){
             otherPlayerRecView.setVisibility(View.VISIBLE);
@@ -195,6 +187,17 @@ public class ShieldFragment extends Fragment implements NightPlayerRoleRecViewAd
             otherPlayerRecView.setVisibility(View.GONE);
         }
     }
+
+    private void initView(View view) {
+        shieldPlayerRecView = view.findViewById(R.id.shieldPlayerRecView);
+        otherPlayerRecView = view.findViewById(R.id.otherPlayerRecView);
+        nextBtn = view.findViewById(R.id.nextBtn);
+        protectBtn = view.findViewById(R.id.protectBtn);
+        nameRoomNightTxt = view.findViewById(R.id.nameRoomNightTxt);
+        nightTxt = view.findViewById(R.id.nightTxt);
+    }
+
+
 
     @Override
     public void onItemClick(int position) {

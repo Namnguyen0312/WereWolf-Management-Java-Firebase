@@ -14,17 +14,19 @@
         android:fontFamily="@font/bigelow_rules"
         android:text="WereWolf Management"
         android:textAlignment="center"
-        android:textSize="50dp"
+        android:textSize="60sp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/createBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="180dp"
+        android:backgroundTint="@color/my_secondary"
         android:text="Create a room"
         android:textColor="@color/black"
-        android:backgroundTint="@color/my_secondary" />
+        android:textSize="20sp" />
 
 
 </LinearLayout>

@@ -12,9 +12,9 @@
     <TextView
         android:id="@+id/nameRoomTxt"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="wrap_content"
         android:text="Name"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -23,8 +23,20 @@
         android:layout_height="wrap_content"
         android:text="Player"
         android:textAlignment="center"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"/>
+
+    <EditText
+        android:id="@+id/namePlayerEdtTxt"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edt_text_rounded_corner"
+        android:elevation="5dp"
+        android:hint="Enter Name"
+        android:padding="3dp"
+        android:textSize="30dp" />
 
     <ImageView
         android:id="@+id/roleImg"
@@ -39,13 +51,14 @@
         android:layout_height="wrap_content"
         android:text="Werewolf"
         android:textAlignment="center"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <Button
         android:id="@+id/nextPlayerBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:textSize="20sp"
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/my_secondary"
         android:text="Next Player"

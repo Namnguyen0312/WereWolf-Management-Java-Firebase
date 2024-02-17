@@ -23,18 +23,19 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import code.org.werewolfmanagement.adapter.NightPlayerRoleRecViewAdapter;
+import code.org.werewolfmanagement.adapter.RoleRecViewAdapter;
+import code.org.werewolfmanagement.adapter.WolfBiteRecViewAdapter;
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
 
-public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdapter.OnItemClickListener {
-    private Button biteBtn;
+public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnItemClickListener {
+    private Button biteBtn, nextBtn;
     private TextView nameRoomNightTxt, nightTxt;
     private RecyclerView wolfPlayerRecView, otherPlayerRecView;
-    private NightPlayerRoleRecViewAdapter wolfAdapter, otherRoleAdapter;
-
+    private RoleRecViewAdapter wolfAdapter;
+    private WolfBiteRecViewAdapter otherRoleAdapter;
     private RoomModel roomModel;
     private PlayerModel bittenPlayer;
     private String roomId;
@@ -70,6 +71,9 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
             setUpOtherRoleRecView();
         });
 
+        nextBtn.setOnClickListener(v -> {
+            setArgument();
+        });
 
 
         return view;
@@ -100,8 +104,8 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        otherRoleAdapter = new NightPlayerRoleRecViewAdapter(options, getContext(), this);
-        otherPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        otherRoleAdapter = new WolfBiteRecViewAdapter(options, getContext(), this);
+        otherPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         otherPlayerRecView.setAdapter(otherRoleAdapter);
         otherRoleAdapter.startListening();
     }
@@ -115,8 +119,8 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        wolfAdapter = new NightPlayerRoleRecViewAdapter(options, getContext());
-        wolfPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        wolfAdapter = new RoleRecViewAdapter(options, getContext());
+        wolfPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         wolfPlayerRecView.setAdapter(wolfAdapter);
         wolfAdapter.startListening();
     }
@@ -128,16 +132,6 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
         roomId = roomModel.getRoomId();
     }
 
-
-    private void initView(View view) {
-        wolfPlayerRecView = view.findViewById(R.id.wolfPlayerRecView);
-        otherPlayerRecView = view.findViewById(R.id.otherPlayerRecView);
-
-        biteBtn = view.findViewById(R.id.biteBtn);
-        nameRoomNightTxt = view.findViewById(R.id.nameRoomNightTxt);
-        nightTxt = view.findViewById(R.id.nightTxt);
-    }
-
     private void btnClick(boolean isClick){
         if(isClick){
             otherPlayerRecView.setVisibility(View.VISIBLE);
@@ -147,6 +141,17 @@ public class WolfFragment extends Fragment implements NightPlayerRoleRecViewAdap
             otherPlayerRecView.setVisibility(View.GONE);
         }
     }
+
+    private void initView(View view) {
+        wolfPlayerRecView = view.findViewById(R.id.wolfPlayerRecView);
+        otherPlayerRecView = view.findViewById(R.id.otherPlayerRecView);
+        nextBtn = view.findViewById(R.id.nextBtn);
+        biteBtn = view.findViewById(R.id.biteBtn);
+        nameRoomNightTxt = view.findViewById(R.id.nameRoomNightTxt);
+        nightTxt = view.findViewById(R.id.nightTxt);
+    }
+
+
 
     @Override
     public void onItemClick(int position) {

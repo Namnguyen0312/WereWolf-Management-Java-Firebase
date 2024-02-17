@@ -34,12 +34,12 @@ import code.org.werewolfmanagement.utils.FirebaseUtil;
 
 public class DeadFragment extends Fragment {
 
-    private TextView nameRoomDayTxt, dayTxt;
+    private TextView nameRoomDayTxt, dayTxt, noDeadTxt;
     private RoomModel roomModel;
     private LinearLayout layoutClick, deadScr, noOneDeadScr;
     private int countDay;
     private RecyclerView deadRecView;
-    private DeadPlayerRoleRecViewAdapter  deadPlayerAdapter;
+    private DeadPlayerRoleRecViewAdapter deadPlayerAdapter;
     private String roomId;
 
     private static final String TAG = "DeadFragment";
@@ -53,6 +53,8 @@ public class DeadFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dead, container, false);
         initView(view);
 
+        noDeadTxt.setVisibility(View.GONE);
+
         getData();
 
         setNameRoom();
@@ -62,8 +64,13 @@ public class DeadFragment extends Fragment {
         setUpKilledPlayerRecView();
 
         layoutClick.setOnClickListener(v -> {
-            setArgument();
+            if (AndroidUtil.isWolfMoreThanVillagers(roomModel.getValueOfWolf(), roomModel.getValueOfVillager(), roomModel.getValueOfShield())) {
+                setArgumentToEndGameFragment();
+            } else {
+                setArgumentToDiscussFragment();
+            }
         });
+
 
         return view;
     }
@@ -77,11 +84,19 @@ public class DeadFragment extends Fragment {
         nameRoomDayTxt.setText(name);
     }
 
-    private void setArgument() {
+    private void setArgumentToDiscussFragment() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
         bundle.putInt("countCall", 0);
         NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
-        navController.navigate(R.id.navigateFromDeadFragmentToHangFragment, bundle);
+        navController.navigate(R.id.navigateFromDeadFragmentToDiscussFragment, bundle);
+    }
+
+    private void setArgumentToEndGameFragment() {
+        Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
+        bundle.putInt("countCall", 0);
+        bundle.putBoolean("isWolfWin", true);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+        navController.navigate(R.id.navigateFromDeadFragmentToEndGameFragment, bundle);
     }
 
     private void getData() {
@@ -92,6 +107,7 @@ public class DeadFragment extends Fragment {
 
     private void deadView(boolean isNoOneDead) {
         if (isNoOneDead) {
+            noDeadTxt.setVisibility(View.VISIBLE);
             noOneDeadScr.setVisibility(View.VISIBLE);
             deadScr.setVisibility(View.GONE);
         } else {
@@ -121,14 +137,15 @@ public class DeadFragment extends Fragment {
                                             .setQuery(queryBitten, PlayerModel.class).build();
 
                                     deadPlayerAdapter = new DeadPlayerRoleRecViewAdapter(options, getContext());
-                                    deadRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                    deadRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
                                     deadRecView.setAdapter(deadPlayerAdapter);
                                     deadPlayerAdapter.startListening();
 
-                                    if(documentSnapshot.getString("role").equals("Villager")){
+
+                                    if (documentSnapshot.getString("role").equals("Villager")) {
                                         roomModel.setValueOfVillager(roomModel.getValueOfVillager() - 1);
                                         Log.d(TAG, "Villager" + roomModel.getValueOfVillager());
-                                    }else if (documentSnapshot.getString("role").equals("Shield")){
+                                    } else if (documentSnapshot.getString("role").equals("Shield")) {
                                         roomModel.setValueOfShield(roomModel.getValueOfShield() - 1);
                                         Log.d(TAG, "Shield" + roomModel.getValueOfShield());
                                     }
@@ -169,11 +186,12 @@ public class DeadFragment extends Fragment {
 
 
     }
-    
+
 
     private void initView(View view) {
         nameRoomDayTxt = view.findViewById(R.id.nameRoomDayTxt);
         dayTxt = view.findViewById(R.id.dayTxt);
+        noDeadTxt = view.findViewById(R.id.noDeadTxt);
         layoutClick = view.findViewById(R.id.layoutClick);
         deadRecView = view.findViewById(R.id.deadRecView);
         deadScr = view.findViewById(R.id.deadScr);
@@ -183,7 +201,7 @@ public class DeadFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(deadPlayerAdapter!=null){
+        if (deadPlayerAdapter != null) {
             deadPlayerAdapter.notifyDataSetChanged();
         }
     }

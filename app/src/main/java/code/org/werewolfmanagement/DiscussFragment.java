@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ import code.org.werewolfmanagement.utils.FirebaseUtil;
 public class DiscussFragment extends Fragment implements DayPlayerRoleRecViewAdapter.OnItemClickListener {
 
     private TextView nameRoomDayTxt, dayTxt;
+    private Button skipBtn;
     private RoomModel roomModel;
     private int countDay;
     private RecyclerView hangRecView;
@@ -63,7 +65,53 @@ public class DiscussFragment extends Fragment implements DayPlayerRoleRecViewAda
 
         setUpHangPlayerRecView();
 
+        skipBtn.setOnClickListener(v -> {
+            resetPlayer();
+            setSkip();
+        });
+
+
         return view;
+    }
+
+    private void resetPlayer() {
+        FirebaseUtil.getPlayerReference(roomId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Map<String, Object> updates = new HashMap<>();
+                            updates.put("bitten", false);
+                            updates.put("protected", false);
+                            FirebaseUtil.getPlayerWithIdReference(roomId, documentSnapshot.getId())
+                                    .update(updates)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d(TAG, "Successfully updated!");
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating reset", e);
+                                        }
+                                    });
+                            Log.d(TAG, "DocumentSnapshots successfully updated!");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+    }
+
+    private void setSkip(){
+        setArgumentToNightFragment();
     }
 
     private void setUpHangPlayerRecView() {
@@ -75,18 +123,25 @@ public class DiscussFragment extends Fragment implements DayPlayerRoleRecViewAda
                 .setQuery(query, PlayerModel.class).build();
 
         allPlayerAdapter = new DayPlayerRoleRecViewAdapter(options, getContext(), this);
-        hangRecView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        hangRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         hangRecView.setAdapter(allPlayerAdapter);
         allPlayerAdapter.startListening();
 
     }
 
-    private void setArgument() {
+    private void setArgumentToHangFragment() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
         bundle.putInt("countCall", 0);
-        bundle.putInt("playerId", playerModel.getPlayerId());
+        bundle.putString("namePlayer", playerModel.getNamePlayer());
         NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
         navController.navigate(R.id.navigateFromDiscussFragmentToHangFragment, bundle);
+    }
+
+    private void setArgumentToNightFragment(){
+        Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
+        bundle.putInt("countCall", 0);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+        navController.navigate(R.id.navigateFromDiscussFragmentToNightFragment, bundle);
     }
 
     private void setDay() {
@@ -108,6 +163,7 @@ public class DiscussFragment extends Fragment implements DayPlayerRoleRecViewAda
     private void initView(View view) {
         nameRoomDayTxt = view.findViewById(R.id.nameRoomDayTxt);
         dayTxt = view.findViewById(R.id.dayTxt);
+        skipBtn = view.findViewById(R.id.skipBtn);
         hangRecView = view.findViewById(R.id.hangRecView);
     }
 
@@ -141,7 +197,7 @@ public class DiscussFragment extends Fragment implements DayPlayerRoleRecViewAda
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
-                                            setArgument();
+                                            setArgumentToHangFragment();
                                             Log.d(TAG, "Successfully updated!");
                                         }
                                     })

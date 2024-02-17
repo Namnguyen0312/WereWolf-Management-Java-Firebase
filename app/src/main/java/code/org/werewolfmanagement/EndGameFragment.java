@@ -1,9 +1,12 @@
 package code.org.werewolfmanagement;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +20,11 @@ import code.org.werewolfmanagement.utils.AndroidUtil;
 
 public class EndGameFragment extends Fragment {
 
-    private TextView nameRoomDayTxt, dayTxt;
+    private TextView nameRoomDayTxt, dayTxt, endTxt;
     private RoomModel roomModel;
     private LinearLayout layoutClick;
     private int countDay;
-    private int playerId;
-    private String roomId;
+    private boolean isWolfWin;
 
     public EndGameFragment() {
     }
@@ -40,13 +42,28 @@ public class EndGameFragment extends Fragment {
 
         setDay();
 
+        if(isWolfWin){
+            endTxt.setText("Wolf Win");
+        }else {
+            endTxt.setText("Villager Win");
+        }
         layoutClick.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            navigateToMainActivity();
         });
 
         return view;
+    }
+
+    private void navigateToMainActivity(){
+        ActivityOptions options = ActivityOptions.makeCustomAnimation(requireContext(), R.anim.fade_in, R.anim.fade_out);
+
+        Intent intent = new Intent(requireContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        Bundle animationBundle = options.toBundle();
+        intent.putExtras(animationBundle);
+
+        startActivity(intent,animationBundle);
     }
 
     private void setDay() {
@@ -60,14 +77,14 @@ public class EndGameFragment extends Fragment {
 
     private void getData() {
         countDay = getArguments().getInt("count");
-        playerId = getArguments().getInt("playerId");
+        isWolfWin = getArguments().getBoolean("isWolfWin");
         roomModel = AndroidUtil.getModelByArgument(getArguments());
-        roomId = roomModel.getRoomId();
     }
 
     private void initView(View view) {
         nameRoomDayTxt = view.findViewById(R.id.nameRoomDayTxt);
         dayTxt = view.findViewById(R.id.dayTxt);
         layoutClick = view.findViewById(R.id.layoutClick);
+        endTxt = view.findViewById(R.id.endTxt);
     }
 }

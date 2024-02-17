@@ -34,7 +34,7 @@ public class DeadPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Playe
 
     @Override
     protected void onBindViewHolder(@NonNull PlayerModelViewHolder holder, int position, @NonNull PlayerModel model) {
-        holder.noPlayerTxt.setText("Player " + model.getPlayerId());
+        holder.noPlayerTxt.setText(model.getNamePlayer());
         if (model.getRole().equals("Wolf")) {
             holder.roleImg.setImageResource(R.drawable.werewolf_icon);
         }

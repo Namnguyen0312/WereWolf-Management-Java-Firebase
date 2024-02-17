@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/bigelow_rules"
             android:text="WereWolf Management"
-            android:textSize="40sp"
+            android:textSize="60sp"
             android:textStyle="bold" />
 
         <ProgressBar

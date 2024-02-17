@@ -3,14 +3,16 @@ package code.org.werewolfmanagement.model;
 
 public class PlayerModel{
     private int playerId;
+    private String namePlayer;
     private String role;
     private boolean isProtected, isBitten, isDead, isProtectedLastNight;
 
     public PlayerModel() {
     }
 
-    public PlayerModel(int playerId, String role, boolean isProtected, boolean isBitten, boolean isDead, boolean isProtectedLastNight) {
+    public PlayerModel(int playerId, String namePlayer, String role, boolean isProtected, boolean isBitten, boolean isDead, boolean isProtectedLastNight) {
         this.playerId = playerId;
+        this.namePlayer = namePlayer;
         this.role = role;
         this.isProtected = isProtected;
         this.isBitten = isBitten;
@@ -64,5 +66,13 @@ public class PlayerModel{
 
     public void setProtectedLastNight(boolean protectedLastNight) {
         isProtectedLastNight = protectedLastNight;
+    }
+
+    public String getNamePlayer() {
+        return namePlayer;
+    }
+
+    public void setNamePlayer(String namePlayer) {
+        this.namePlayer = namePlayer;
     }
 }

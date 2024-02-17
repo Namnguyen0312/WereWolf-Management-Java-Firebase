@@ -38,7 +38,7 @@ public class HangFragment extends Fragment {
     private RoomModel roomModel;
     private LinearLayout layoutClick;
     private int countDay;
-    private int playerId;
+    private String namePlayer;
     private String roomId;
 
     private static final String TAG = "HangFragment";
@@ -66,8 +66,10 @@ public class HangFragment extends Fragment {
 
         layoutClick.setOnClickListener(v -> {
             if(roomModel.getValueOfWolf() == 0){
-                setArgumentToEndGameFragment();
-            }else {
+                setArgumentToEndGameFragmentWithWolfLose();
+            } else if (AndroidUtil.isWolfMoreThanVillagers(roomModel.getValueOfWolf(), roomModel.getValueOfVillager(), roomModel.getValueOfShield())) {
+                setArgumentToEndGameFragmentWithWolfWin();
+            } else {
                 setArgumentToNightFragment();
             }
         });
@@ -114,7 +116,7 @@ public class HangFragment extends Fragment {
 
 
     private void setHangedPlayer() {
-        hangedPlayerTxt.setText("Player " + playerId);
+        hangedPlayerTxt.setText(namePlayer);
     }
 
     private void setDay() {
@@ -133,17 +135,26 @@ public class HangFragment extends Fragment {
         navController.navigate(R.id.navigateFromHangFragmentToNightFragment, bundle);
     }
 
-    private void setArgumentToEndGameFragment() {
+    private void setArgumentToEndGameFragmentWithWolfLose() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
         bundle.putInt("countCall", 0);
+        bundle.putBoolean("isWolfWin", false);
         NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
         navController.navigate(R.id.navigateFromHangFragmentToEndGameFragment, bundle);
     }
+    private void setArgumentToEndGameFragmentWithWolfWin() {
+        Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countDay);
+        bundle.putInt("countCall", 0);
+        bundle.putBoolean("isWolfWin", true);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+        navController.navigate(R.id.navigateFromHangFragmentToEndGameFragment, bundle);
+    }
+
     
 
     private void getData() {
         countDay = getArguments().getInt("count");
-        playerId = getArguments().getInt("playerId");
+        namePlayer = getArguments().getString("namePlayer");
         roomModel = AndroidUtil.getModelByArgument(getArguments());
         roomId = roomModel.getRoomId();
     }
