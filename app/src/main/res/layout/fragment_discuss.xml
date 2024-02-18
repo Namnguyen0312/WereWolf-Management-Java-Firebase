@@ -75,9 +75,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp">
-
-
+        android:layout_marginTop="30dp"
+        android:gravity="center">
 
         <androidx.recyclerview.widget.RecyclerView class="androidx.appcompat.app.AlertController$RecycleListView"
             android:layout_width="match_parent"
@@ -85,6 +84,7 @@
             android:id="@+id/hangRecView">
 
         </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 
 

@@ -1,7 +1,10 @@
 package code.org.werewolfmanagement;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
+import code.org.werewolfmanagement.utils.MediaPlayerUtil;
 
 public class NightFragment extends Fragment {
 
@@ -23,24 +27,44 @@ public class NightFragment extends Fragment {
     private RoomModel roomModel;
     private int countNight, countCall;
 
+    private MediaPlayerUtil nightMedia;
 
     public NightFragment() {
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_night, container, false);
 
+        nightMedia = MediaPlayerUtil.getInstance();
+
+//        if (!mediaPlayerUtil.isPlaying()){
+//            mediaPlayerUtil.stopMedia();
+//            mediaPlayerUtil.playMedia(requireContext(), R.raw.night);
+//        }else {
+//            mediaPlayerUtil.playMedia(requireContext(), R.raw.night);
+//        }
+
+
         initView(view);
 
         getDataFromDayFragment();
+
+
+
+        if (countCall == 0){
+            nightMedia.stopMedia();
+            nightMedia.playMedia(requireContext(), R.raw.night);
+        }
 
         setNameRoom();
 
         setNight();
 
         setCall();
+
 
         nightClick.setOnClickListener(v -> {
             setArgument();

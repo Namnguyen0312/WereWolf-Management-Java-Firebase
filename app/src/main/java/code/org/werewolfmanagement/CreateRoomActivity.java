@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import code.org.werewolfmanagement.utils.AndroidUtil;
 
 public class CreateRoomActivity extends AppCompatActivity {
 
     private EditText nameRoomEdt, numberEdt;
+    private ImageView backBtn;
     private Button nextBtn;
 
     @Override
@@ -21,9 +23,19 @@ public class CreateRoomActivity extends AppCompatActivity {
 
         initView();
 
+        backBtn.setOnClickListener(v -> {
+            setBack();
+        });
+
         nextBtn.setOnClickListener(v -> {
             navigateChooseRole();
         });
+    }
+
+    private void setBack(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /**
@@ -52,5 +64,6 @@ public class CreateRoomActivity extends AppCompatActivity {
         nameRoomEdt = findViewById(R.id.nameRoomEdt);
         numberEdt = findViewById(R.id.numberEdt);
         nextBtn = findViewById(R.id.nextBtn);
+        backBtn = findViewById(R.id.backBtn);
     }
 }

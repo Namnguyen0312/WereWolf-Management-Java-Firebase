@@ -71,7 +71,7 @@
             android:layout_width="350dp"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:background="@drawable/btn_rounded_corner"
             android:text="The wolf wants to kill someone."
             android:textColor="@color/my_secondary" />
@@ -81,7 +81,7 @@
             android:layout_width="350dp"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
-            android:textSize="20sp"
+            android:textSize="17sp"
             android:background="@drawable/btn_rounded_corner"
             android:backgroundTint="@color/my_secondary"
             android:text="The wolf doesn't kill anyone."
@@ -94,7 +94,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:gravity="center">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/wolfPlayerRecView"

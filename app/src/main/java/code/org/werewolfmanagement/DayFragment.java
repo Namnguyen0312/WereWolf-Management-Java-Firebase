@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
+import code.org.werewolfmanagement.utils.MediaPlayerUtil;
 
 public class DayFragment extends Fragment {
 
@@ -22,7 +23,7 @@ public class DayFragment extends Fragment {
     private RoomModel roomModel;
     private LinearLayout layoutClick;
     private int countDay;
-
+    private MediaPlayerUtil nightMedia;
 
     public DayFragment() {
     }
@@ -33,6 +34,11 @@ public class DayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_day, container, false);
         initView(view);
 
+        nightMedia = MediaPlayerUtil.getInstance();
+        nightMedia.stopMedia();
+
+
+
         getData();
 
         setNameRoom();
@@ -41,10 +47,12 @@ public class DayFragment extends Fragment {
 
         if(countDay == 1){
             dayCallTxt.setText("The Villagers Have Descended Into Darkness");
+
             layoutClick.setOnClickListener(v -> {
                 setArgumentToNightFragment();
             });
         }else {
+            nightMedia.playMedia(getContext(), R.raw.day);
             dayCallTxt.setText("The villagers have all stirred");
             layoutClick.setOnClickListener(v -> {
                 setArgumentToDeadFragment();

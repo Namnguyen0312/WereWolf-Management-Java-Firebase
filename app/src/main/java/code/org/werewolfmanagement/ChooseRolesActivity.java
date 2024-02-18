@@ -19,7 +19,7 @@ import code.org.werewolfmanagement.utils.FirebaseUtil;
 public class ChooseRolesActivity extends AppCompatActivity {
 
     private TextView countWolfTxt, countVillagerTxt, countShieldTxt, maxPlayerTxt;
-    private ImageView removeWolfBtn, addWolfBtn, removeVillagerBtn, addVillagerBtn, removeShieldBtn, addShieldBtn;
+    private ImageView removeWolfBtn, addWolfBtn, removeVillagerBtn, addVillagerBtn, removeShieldBtn, addShieldBtn, backBtn;
     private Button playBtn;
     private ProgressBar chooseRoleProgressBar;
     private int countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt;
@@ -44,6 +44,10 @@ public class ChooseRolesActivity extends AppCompatActivity {
         numberOfPlayerInt = AndroidUtil.parseInt(numberOfPlayer);
 
         maxPlayerTxt.setText("Roles (Max " + numberOfPlayer + " Roles)");
+
+        backBtn.setOnClickListener(v -> {
+            setBack();
+        });
 
         removeWolfBtn.setOnClickListener(v -> {
             removeWolf();
@@ -73,6 +77,12 @@ public class ChooseRolesActivity extends AppCompatActivity {
             setRoom();
         });
 
+    }
+
+    private void setBack(){
+        Intent intent = new Intent(this, CreateRoomActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /**
@@ -212,6 +222,7 @@ public class ChooseRolesActivity extends AppCompatActivity {
         addVillagerBtn = findViewById(R.id.addVillagerBtn);
         removeShieldBtn = findViewById(R.id.removeShieldBtn);
         addShieldBtn = findViewById(R.id.addShieldBtn);
+        backBtn = findViewById(R.id.backBtn);
         chooseRoleProgressBar = findViewById(R.id.progressBar);
         maxPlayerTxt = findViewById(R.id.maxPlayerTxt);
     }

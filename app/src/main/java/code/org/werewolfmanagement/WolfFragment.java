@@ -1,5 +1,6 @@
 package code.org.werewolfmanagement;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -39,12 +40,22 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
     private RoomModel roomModel;
     private PlayerModel bittenPlayer;
     private String roomId;
-
     private int countNight, countCall;
 
     private static final String TAG = "WolfFragment";
 
     public WolfFragment() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(otherRoleAdapter!=null){
+            otherRoleAdapter.notifyDataSetChanged();
+        }
+        if(wolfAdapter!=null){
+            wolfAdapter.notifyDataSetChanged();
+        }
     }
 
 
@@ -193,14 +204,5 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(otherRoleAdapter!=null){
-            otherRoleAdapter.notifyDataSetChanged();
-        }
-        if(wolfAdapter!=null){
-            wolfAdapter.notifyDataSetChanged();
-        }
-    }
+
 }

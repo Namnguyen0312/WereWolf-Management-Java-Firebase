@@ -24,7 +24,7 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
     private TextView nameRoomTxt, playerTxt, roleNameTxt;
     private EditText namePlayerEdtTxt;
-    private ImageView roleImg;
+    private ImageView roleImg, backBtn;
     private Button nextPlayerBtn;
     private ProgressBar receiveRoleProgressBar;
     private RoomModel roomModel;
@@ -33,7 +33,6 @@ public class ReceiveRolesActivity extends AppCompatActivity {
     private String roomId;
     private Random random = new Random();
     private String randomValue;
-    private String namePlayer;
 
     private int countWolf = 0, countVillager = 0, countShield = 0;
 
@@ -47,14 +46,28 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
         initView();
 
+
         setNameRoom();
 
+
         setRoles();
+
+        backBtn.setOnClickListener(v -> {
+            setBack();
+        });
 
         setInProgress(false);
 
         receiveRole();
 
+    }
+
+    private void setBack(){
+        Intent intent = new Intent(this, ChooseRolesActivity.class);
+        intent.putExtra("name", roomModel.getName());
+        intent.putExtra("numberOfPlayer", String.valueOf(roomModel.getNumberOfPlayer()));
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     /**
@@ -90,7 +103,7 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
         animation = AndroidUtil.getAnimation(getApplicationContext(), R.anim.fade);
 
-        if (countPlayerId >= roomModel.getNumberOfPlayer()) {
+        if (countPlayerId == roomModel.getNumberOfPlayer() -1) {
             nextPlayerBtn.setText("Play");
         }
 
@@ -188,6 +201,7 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         nextPlayerBtn = findViewById(R.id.nextPlayerBtn);
         receiveRoleProgressBar = findViewById(R.id.progressBar);
         namePlayerEdtTxt = findViewById(R.id.namePlayerEdtTxt);
+        backBtn = findViewById(R.id.backBtn);
     }
 
 
