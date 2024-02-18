@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
+import code.org.werewolfmanagement.utils.MediaPlayerUtil;
 
 
 public class EndGameFragment extends Fragment {
@@ -25,6 +26,8 @@ public class EndGameFragment extends Fragment {
     private LinearLayout layoutClick;
     private int countDay;
     private boolean isWolfWin;
+
+    private MediaPlayerUtil endgameMedia;
 
     public EndGameFragment() {
     }
@@ -47,9 +50,17 @@ public class EndGameFragment extends Fragment {
         }else {
             endTxt.setText("Villager Win");
         }
+
+        endgameMedia = MediaPlayerUtil.getInstance();
+        endgameMedia.stopMedia();
+        endgameMedia.playMedia(getContext(), R.raw.firework);
+
         layoutClick.setOnClickListener(v -> {
+            endgameMedia.stopMedia();
             navigateToMainActivity();
         });
+
+
 
         return view;
     }

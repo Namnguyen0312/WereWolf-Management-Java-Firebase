@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import code.org.werewolfmanagement.utils.MediaPlayerUtil;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button createBtn;
+    private MediaPlayerUtil mainMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
         initView();
 
+        mainMedia = MediaPlayerUtil.getInstance();
+
+        mainMedia.playMedia(getApplicationContext(), R.raw.creat_room);
+
         createBtn.setOnClickListener(v -> {
+            mainMedia.stopMedia();
             navigateCreateRoom();
         });
     }
