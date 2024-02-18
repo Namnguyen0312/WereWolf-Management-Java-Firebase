@@ -30,6 +30,7 @@ import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
+import code.org.werewolfmanagement.utils.GridSpacingItemDecorationUtil;
 
 public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnItemClickListener {
     private Button biteBtn, nextBtn;

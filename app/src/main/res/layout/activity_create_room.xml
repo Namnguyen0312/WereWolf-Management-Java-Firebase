@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateRoomActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <ImageView
         android:layout_width="50dp"
@@ -62,7 +63,7 @@
             android:id="@+id/nextBtn"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@color/my_secondary"
             android:text="Next"
             android:textColor="@color/black"

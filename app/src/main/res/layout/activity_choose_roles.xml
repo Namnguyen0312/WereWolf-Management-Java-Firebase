@@ -5,22 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ChooseRolesActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+>
 
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/back_icon"
-        android:id="@+id/backBtn"/>
+        android:id="@+id/backBtn"
+        android:layout_margin="10dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
-
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -28,7 +28,8 @@
             android:text="Roles"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:id="@+id/maxPlayerTxt" />
+            android:id="@+id/maxPlayerTxt"
+            android:layout_marginStart="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

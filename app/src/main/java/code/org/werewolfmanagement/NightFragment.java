@@ -40,21 +40,12 @@ public class NightFragment extends Fragment {
 
         nightMedia = MediaPlayerUtil.getInstance();
 
-//        if (!mediaPlayerUtil.isPlaying()){
-//            mediaPlayerUtil.stopMedia();
-//            mediaPlayerUtil.playMedia(requireContext(), R.raw.night);
-//        }else {
-//            mediaPlayerUtil.playMedia(requireContext(), R.raw.night);
-//        }
-
-
         initView(view);
 
         getDataFromDayFragment();
 
 
-
-        if (countCall == 0){
+        if (countCall == 0) {
             nightMedia.stopMedia();
             nightMedia.playMedia(requireContext(), R.raw.night);
         }
@@ -77,35 +68,31 @@ public class NightFragment extends Fragment {
     private void setArgument() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countNight);
         bundle.putInt("countCall", countCall);
-        if (roomModel.getValueOfShield() != 0){
-            if (countCall == 0){
+        if (roomModel.getValueOfShield() != 0) {
+            if (countCall == 0) {
                 NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
                 navController.navigate(R.id.navigateToShieldFragment, bundle);
             }
         }
-        if (roomModel.getValueOfWolf() != 0){
+        if (roomModel.getValueOfWolf() != 0) {
             if (countCall == 1) {
                 NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
                 navController.navigate(R.id.navigateToWolfFragment, bundle);
             }
         }
-
-
     }
 
-    private void setCall(){
-        if (roomModel.getValueOfShield() != 0){
-            if(countCall == 0){
+    private void setCall() {
+        if (roomModel.getValueOfShield() != 0) {
+            if (countCall == 0) {
                 callTxt.setText("Shield, Please Wake Up");
             }
-        }
-        else countCall++;
-        if (roomModel.getValueOfWolf() != 0){
+        } else countCall++;
+        if (roomModel.getValueOfWolf() != 0) {
             if (countCall == 1) {
                 callTxt.setText("Wolf, Please Wake Up");
             }
-        }
-        else countCall++;
+        } else countCall++;
 
     }
 
