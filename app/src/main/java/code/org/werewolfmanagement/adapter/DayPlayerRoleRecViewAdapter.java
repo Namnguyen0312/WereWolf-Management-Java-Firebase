@@ -27,10 +27,6 @@ public class DayPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Player
         this.listener = listener;
     }
 
-    public DayPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context) {
-        super(options);
-        this.context = context;
-    }
 
     @Override
     protected void onBindViewHolder(@NonNull PlayerModelViewHolder holder, int position, @NonNull PlayerModel model) {
@@ -43,6 +39,9 @@ public class DayPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Player
         }
         if (model.getRole().equals("Villager")) {
             holder.roleImg.setImageResource(R.drawable.villager_icon);
+        }
+        if (model.getRole().equals("Seer")) {
+            holder.roleImg.setImageResource(R.drawable.seer_icon);
         }
 
         holder.itemView.setOnClickListener(v -> {

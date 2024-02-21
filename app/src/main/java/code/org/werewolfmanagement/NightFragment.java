@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ public class NightFragment extends Fragment {
     private int countNight, countCall;
 
     private MediaPlayerUtil nightMedia;
+
+    private static final String TAG = "NightFragment";
 
     public NightFragment() {
     }
@@ -56,43 +59,61 @@ public class NightFragment extends Fragment {
 
         setCall();
 
-
+        Log.d(TAG, "onCreateView: countcall " + countCall);
         nightClick.setOnClickListener(v -> {
+            Log.d(TAG, "onCreateView: countcall " + countCall);
             setArgument();
         });
 
         return view;
     }
 
+    private void setArgumentToDayFragment(){
+        Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countNight);
+        bundle.putInt("countCall", countCall);
+        NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+        navController.navigate(R.id.navigateFromNightFragmentToDayFragment, bundle);
+    }
 
     private void setArgument() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countNight);
         bundle.putInt("countCall", countCall);
-        if (roomModel.getValueOfShield() != 0) {
-            if (countCall == 0) {
-                NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
-                navController.navigate(R.id.navigateToShieldFragment, bundle);
-            }
+        if (countCall == 0) {
+            NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+            navController.navigate(R.id.navigateToShieldFragment, bundle);
         }
-        if (roomModel.getValueOfWolf() != 0) {
-            if (countCall == 1) {
-                NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
-                navController.navigate(R.id.navigateToWolfFragment, bundle);
-            }
+        else if (countCall == 1) {
+            NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+            navController.navigate(R.id.navigateToWolfFragment, bundle);
+        }
+        else if (countCall == 2) {
+            NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
+            navController.navigate(R.id.navigateToSeerFragment, bundle);
         }
     }
 
     private void setCall() {
-        if (roomModel.getValueOfShield() != 0) {
-            if (countCall == 0) {
+        if (countCall == 0) {
+            if (roomModel.getValueOfShield() != 0) {
                 callTxt.setText("Shield, Please Wake Up");
-            }
-        } else countCall++;
-        if (roomModel.getValueOfWolf() != 0) {
-            if (countCall == 1) {
+            } else countCall++;
+        }
+
+        if (countCall == 1) {
+            if (roomModel.getValueOfWolf() != 0) {
                 callTxt.setText("Wolf, Please Wake Up");
-            }
-        } else countCall++;
+            } else countCall++;
+        }
+
+        if (countCall == 2) {
+            if (roomModel.getValueOfSeer() != 0) {
+                callTxt.setText("Seer, Please Wake Up");
+            } else countCall++;
+        }
+
+        if (countCall == 3) {
+            setArgumentToDayFragment();
+        }
 
     }
 

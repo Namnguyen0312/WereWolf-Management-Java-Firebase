@@ -26,6 +26,9 @@
             android:name="valueOfShield"
             app:argType="integer" />
         <argument
+            android:name="valueOfSeer"
+            app:argType="integer" />
+        <argument
             android:name="roomId"
             app:argType="string" />
         <argument
@@ -61,6 +64,16 @@
             app:destination="@id/wolfFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/navigateToSeerFragment"
+            app:destination="@id/seerFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/navigateFromNightFragmentToDayFragment"
+            app:destination="@id/dayFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
 
     </fragment>
     <fragment
@@ -69,8 +82,8 @@
         android:label="fragment_wolf"
         tools:layout="@layout/fragment_wolf" >
         <action
-            android:id="@+id/navigateFromWolfFragmentToDayFragment"
-            app:destination="@id/dayFragment"
+            android:id="@+id/navigateFromWolfFragmentToNightFragment"
+            app:destination="@id/nightFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out" />
     </fragment>
@@ -138,4 +151,24 @@
         android:name="code.org.werewolfmanagement.EndGameFragment"
         android:label="fragment_end_game"
         tools:layout="@layout/fragment_end_game" />
+    <fragment
+        android:id="@+id/seerFragment"
+        android:name="code.org.werewolfmanagement.SeerFragment"
+        android:label="fragment_seer"
+        tools:layout="@layout/fragment_seer" >
+        <action
+            android:id="@+id/navigateFromSeerFragmentToRoleWhenSeerFragment"
+            app:destination="@id/roleWhenSeerFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/roleWhenSeerFragment"
+        android:name="code.org.werewolfmanagement.RoleWhenSeerFragment"
+        android:label="fragment_role_when_seer"
+        tools:layout="@layout/fragment_role_when_seer" >
+        <action
+            android:id="@+id/navigateFromRoleWhenSeerFragmentToNightFragment"
+            app:destination="@id/nightFragment" />
+    </fragment>
 </navigation>

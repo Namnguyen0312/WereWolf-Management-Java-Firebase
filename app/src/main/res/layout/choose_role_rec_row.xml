@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/day_player_rounded_corner"
+    android:elevation="10dp"
+    android:layout_margin="10dp">
+
+
+        <ImageView
+            android:layout_width="220dp"
+            android:layout_height="170dp"
+            android:src="@drawable/werewolf_icon"
+            app:tint="@color/black"
+            android:layout_marginTop="5dp"
+            android:id="@+id/roleImg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wolf"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:id="@+id/nameRoleTxt"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/removeBtn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/remove_icon"
+                app:tint="@color/my_secondary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="30sp"
+                android:id="@+id/countTxt" />
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/add_icon"
+                app:tint="@color/my_secondary"
+                android:layout_marginStart="20dp"
+                android:id="@+id/addBtn" />
+
+        </LinearLayout>
+
+</LinearLayout>

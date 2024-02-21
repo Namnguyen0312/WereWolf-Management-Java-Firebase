@@ -33,14 +33,14 @@ public class WolfBiteRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel
     protected void onBindViewHolder(@NonNull PlayerModelViewHolder holder, int position, @NonNull PlayerModel model) {
 
         holder.noPlayerTxt.setText(model.getNamePlayer());
-        if (model.getRole().equals("Wolf")) {
-            holder.roleImg.setImageResource(R.drawable.werewolf_icon);
-        }
         if (model.getRole().equals("Shield")) {
             holder.roleImg.setImageResource(R.drawable.shield_icon);
         }
         if (model.getRole().equals("Villager")) {
             holder.roleImg.setImageResource(R.drawable.villager_icon);
+        }
+        if (model.getRole().equals("Seer")) {
+            holder.roleImg.setImageResource(R.drawable.seer_icon);
         }
 
         holder.itemView.setOnClickListener(v -> {

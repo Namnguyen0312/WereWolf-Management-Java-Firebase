@@ -1,16 +1,13 @@
 package code.org.werewolfmanagement;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,34 +15,29 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import code.org.werewolfmanagement.adapter.RoleRecViewAdapter;
-import code.org.werewolfmanagement.adapter.WolfBiteRecViewAdapter;
+import code.org.werewolfmanagement.adapter.SeerRecViewAdapter;
 import code.org.werewolfmanagement.model.PlayerModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
-import code.org.werewolfmanagement.utils.GridSpacingItemDecorationUtil;
 
-public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnItemClickListener {
-    private Button biteBtn, nextBtn;
+public class SeerFragment extends Fragment implements SeerRecViewAdapter.OnItemClickListener {
+    private Button seerBtn, nextBtn;
     private TextView nameRoomNightTxt, nightTxt;
-    private RecyclerView wolfPlayerRecView, otherPlayerRecView;
-    private RoleRecViewAdapter wolfAdapter;
-    private WolfBiteRecViewAdapter otherRoleAdapter;
+    private RecyclerView seerPlayerRecView, otherPlayerRecView;
+    private RoleRecViewAdapter seerAdapter;
+    private SeerRecViewAdapter otherRoleAdapter;
     private RoomModel roomModel;
-    private PlayerModel bittenPlayer;
     private String roomId;
     private int countNight, countCall;
+    private PlayerModel playerModel;
 
-    private static final String TAG = "WolfFragment";
+    private static final String TAG = "SeerFragment";
 
-    public WolfFragment() {
+    public SeerFragment() {
     }
 
     @Override
@@ -54,8 +46,8 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
         if(otherRoleAdapter!=null){
             otherRoleAdapter.notifyDataSetChanged();
         }
-        if(wolfAdapter!=null){
-            wolfAdapter.notifyDataSetChanged();
+        if(seerAdapter!=null){
+            seerAdapter.notifyDataSetChanged();
         }
     }
 
@@ -63,7 +55,7 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_wolf, container, false);
+        View view = inflater.inflate(R.layout.fragment_seer, container, false);
 
         initView(view);
 
@@ -75,11 +67,11 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
         setNight();
 
         btnClick(false);
-        setUpWolfPlayerRecView();
+        setUpSeerPlayerRecView();
 
-        biteBtn.setOnClickListener(v -> {
+        seerBtn.setOnClickListener(v -> {
             btnClick(true);
-            biteBtn.setEnabled(false);
+            seerBtn.setEnabled(false);
             setUpOtherRoleRecView();
         });
 
@@ -94,8 +86,10 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
     private void setArgument() {
         Bundle bundle = AndroidUtil.passModelByArgument(roomModel, countNight);
         bundle.putInt("countCall", countCall + 1);
+        bundle.putString("playerName", playerModel.getNamePlayer());
+        bundle.putString("playerRole", playerModel.getRole());
         NavController navController = Navigation.findNavController(getActivity(), R.id.fragmentContainerView);
-        navController.navigate(R.id.navigateFromWolfFragmentToNightFragment, bundle);
+        navController.navigate(R.id.navigateFromSeerFragmentToRoleWhenSeerFragment, bundle);
     }
 
     private void setNameRoom() {
@@ -109,32 +103,32 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
 
     private void setUpOtherRoleRecView(){
         Query query = FirebaseUtil.getPlayerReference(roomId)
-                .whereNotEqualTo("role", "Wolf")
+                .whereNotEqualTo("role", "Seer")
                 .whereEqualTo("dead", false)
                 .orderBy("playerId", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        otherRoleAdapter = new WolfBiteRecViewAdapter(options, getContext(), this);
+        otherRoleAdapter = new SeerRecViewAdapter(options, getContext(), this);
         otherPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         otherPlayerRecView.setAdapter(otherRoleAdapter);
         otherRoleAdapter.startListening();
     }
 
-    private void setUpWolfPlayerRecView() {
+    private void setUpSeerPlayerRecView() {
         Query query = FirebaseUtil.getPlayerReference(roomId)
-                .whereEqualTo("role", "Wolf")
+                .whereEqualTo("role", "Seer")
                 .whereEqualTo("dead", false)
                 .orderBy("playerId", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<PlayerModel> options = new FirestoreRecyclerOptions.Builder<PlayerModel>()
                 .setQuery(query, PlayerModel.class).build();
 
-        wolfAdapter = new RoleRecViewAdapter(options, getContext());
-        wolfPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        wolfPlayerRecView.setAdapter(wolfAdapter);
-        wolfAdapter.startListening();
+        seerAdapter = new RoleRecViewAdapter(options, getContext());
+        seerPlayerRecView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        seerPlayerRecView.setAdapter(seerAdapter);
+        seerAdapter.startListening();
     }
 
     private void getDataFromNightFragment() {
@@ -147,18 +141,18 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
     private void btnClick(boolean isClick){
         if(isClick){
             otherPlayerRecView.setVisibility(View.VISIBLE);
-            wolfPlayerRecView.setVisibility(View.GONE);
+            seerPlayerRecView.setVisibility(View.GONE);
         }else {
-            wolfPlayerRecView.setVisibility(View.VISIBLE);
+            seerPlayerRecView.setVisibility(View.VISIBLE);
             otherPlayerRecView.setVisibility(View.GONE);
         }
     }
 
     private void initView(View view) {
-        wolfPlayerRecView = view.findViewById(R.id.wolfPlayerRecView);
+        seerPlayerRecView = view.findViewById(R.id.seerPlayerRecView);
         otherPlayerRecView = view.findViewById(R.id.otherPlayerRecView);
         nextBtn = view.findViewById(R.id.nextBtn);
-        biteBtn = view.findViewById(R.id.biteBtn);
+        seerBtn = view.findViewById(R.id.seerBtn);
         nameRoomNightTxt = view.findViewById(R.id.nameRoomNightTxt);
         nightTxt = view.findViewById(R.id.nightTxt);
     }
@@ -167,43 +161,7 @@ public class WolfFragment extends Fragment implements WolfBiteRecViewAdapter.OnI
 
     @Override
     public void onItemClick(int position) {
-        bittenPlayer = otherRoleAdapter.getItem(position);
-        bittenPlayer.setBitten(true);
-        FirebaseUtil.getPlayerReference(roomId)
-                .whereEqualTo("playerId", bittenPlayer.getPlayerId())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            String playerId = documentSnapshot.getId();
-                            FirebaseUtil.getPlayerWithIdReference(roomId, playerId).set(bittenPlayer)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Log.d(TAG, "Player successfully updated!");
-                                            setArgument();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w(TAG, "Error updating player", e);
-                                        }
-                                    });
-                            Log.d(TAG, "DocumentSnapshots successfully updated!");
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error updating document", e);
-                    }
-                });
-
-
+        playerModel = otherRoleAdapter.getItem(position);
+        setArgument();
     }
-
-
 }

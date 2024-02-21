@@ -16,24 +16,22 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import code.org.werewolfmanagement.R;
 import code.org.werewolfmanagement.model.PlayerModel;
 
-public class DeadPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, DeadPlayerRoleRecViewAdapter.PlayerModelViewHolder> {
+public class SeerRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, SeerRecViewAdapter.PlayerModelViewHolder> {
 
     private Context context;
     private OnItemClickListener listener;
 
-    public DeadPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
+
+    public SeerRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context, OnItemClickListener listener) {
         super(options);
         this.context = context;
         this.listener = listener;
     }
 
-    public DeadPlayerRoleRecViewAdapter(@NonNull FirestoreRecyclerOptions<PlayerModel> options, Context context) {
-        super(options);
-        this.context = context;
-    }
 
     @Override
     protected void onBindViewHolder(@NonNull PlayerModelViewHolder holder, int position, @NonNull PlayerModel model) {
+
         holder.noPlayerTxt.setText(model.getNamePlayer());
         if (model.getRole().equals("Wolf")) {
             holder.roleImg.setImageResource(R.drawable.werewolf_icon);
@@ -43,9 +41,6 @@ public class DeadPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Playe
         }
         if (model.getRole().equals("Villager")) {
             holder.roleImg.setImageResource(R.drawable.villager_icon);
-        }
-        if (model.getRole().equals("Seer")) {
-            holder.roleImg.setImageResource(R.drawable.seer_icon);
         }
 
         holder.itemView.setOnClickListener(v -> {
@@ -62,19 +57,20 @@ public class DeadPlayerRoleRecViewAdapter extends FirestoreRecyclerAdapter<Playe
     @NonNull
     @Override
     public PlayerModelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.dead_player_role_rec_row, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.night_player_role_rec_row, parent, false);
         return new PlayerModelViewHolder(view);
     }
+
 
     public class PlayerModelViewHolder extends RecyclerView.ViewHolder {
         private TextView noPlayerTxt;
         private ImageView roleImg;
 
+
         public PlayerModelViewHolder(@NonNull View itemView) {
             super(itemView);
             noPlayerTxt = itemView.findViewById(R.id.noPlayerTxt);
             roleImg = itemView.findViewById(R.id.roleImg);
-
         }
     }
 }

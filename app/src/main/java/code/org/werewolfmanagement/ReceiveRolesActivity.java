@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
@@ -34,10 +35,11 @@ public class ReceiveRolesActivity extends AppCompatActivity {
     private Random random = new Random();
     private String randomValue;
 
-    private int countWolf = 0, countVillager = 0, countShield = 0;
+    private int countWolf = 0, countVillager = 0, countShield = 0, countSeer = 0;
 
     private Animation animation;
 
+    private static final String TAG = "ReceiveRolesActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,8 @@ public class ReceiveRolesActivity extends AppCompatActivity {
 
         ArrayList<String> rolesList = new ArrayList<>(java.util.Arrays.asList(rolesArray));
 
+        Log.d(TAG, "setRoles: valueSeer" + roomModel.getValueOfSeer() );
+
         if (roomModel.getValueOfWolf() == countWolf) {
             rolesList.remove("Wolf");
         }
@@ -121,6 +125,10 @@ public class ReceiveRolesActivity extends AppCompatActivity {
         if (roomModel.getValueOfShield() == countShield) {
             rolesList.remove("Shield");
         }
+        if (roomModel.getValueOfSeer() == countSeer) {
+            rolesList.remove("Seer");
+        }
+        Log.d(TAG, "setRoles: roleslist" + rolesList);
 
         randomValue = rolesList.get(random.nextInt(rolesList.size()));
 
@@ -137,12 +145,18 @@ public class ReceiveRolesActivity extends AppCompatActivity {
             roleImg.startAnimation(animation);
             roleNameTxt.startAnimation(animation);
             countVillager++;
-        } else {
+        } else if(randomValue.equals("Shield")){
             roleImg.setImageResource(R.drawable.shield_icon);
             roleNameTxt.setText("Shield");
             roleImg.startAnimation(animation);
             roleNameTxt.startAnimation(animation);
             countShield++;
+        } else if(randomValue.equals("Seer")){
+            roleImg.setImageResource(R.drawable.seer_icon);
+            roleNameTxt.setText("Seer");
+            roleImg.startAnimation(animation);
+            roleNameTxt.startAnimation(animation);
+            countSeer++;
         }
     }
 

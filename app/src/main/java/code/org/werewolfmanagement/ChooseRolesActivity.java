@@ -1,6 +1,8 @@
 package code.org.werewolfmanagement;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,17 +14,22 @@ import android.widget.TextView;
 
 import com.google.firebase.Timestamp;
 
+import code.org.werewolfmanagement.adapter.ChooseRoleRecViewAdapter;
+import code.org.werewolfmanagement.model.RoleModel;
 import code.org.werewolfmanagement.model.RoomModel;
 import code.org.werewolfmanagement.utils.AndroidUtil;
 import code.org.werewolfmanagement.utils.FirebaseUtil;
+import code.org.werewolfmanagement.utils.RoleUtil;
 
 public class ChooseRolesActivity extends AppCompatActivity {
 
-    private TextView countWolfTxt, countVillagerTxt, countShieldTxt, maxPlayerTxt;
-    private ImageView removeWolfBtn, addWolfBtn, removeVillagerBtn, addVillagerBtn, removeShieldBtn, addShieldBtn, backBtn;
+    private TextView maxPlayerTxt;
+    private ImageView backBtn;
     private Button playBtn;
+    private RecyclerView chooseRoleRecView;
+    private ChooseRoleRecViewAdapter adapter;
     private ProgressBar chooseRoleProgressBar;
-    private int countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt;
+    private int numberOfPlayerInt;
     private String nameRoom, numberOfPlayer, roomId;
     private RoomModel roomModel;
 
@@ -45,33 +52,19 @@ public class ChooseRolesActivity extends AppCompatActivity {
 
         maxPlayerTxt.setText("Roles (Max " + numberOfPlayer + " Roles)");
 
+        roomModel = new RoomModel();
+        roomModel.setNumberOfPlayer(numberOfPlayerInt);
+
         backBtn.setOnClickListener(v -> {
             setBack();
         });
 
-        removeWolfBtn.setOnClickListener(v -> {
-            removeWolf();
-        });
 
-        addWolfBtn.setOnClickListener(v -> {
-            addWolf();
-        });
+        adapter = new ChooseRoleRecViewAdapter(roomModel);
+        chooseRoleRecView.setAdapter(adapter);
+        chooseRoleRecView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        adapter.setRoles(RoleUtil.getInstance().getRoleModels());
 
-        removeVillagerBtn.setOnClickListener(v -> {
-            removeVillager();
-        });
-
-        addVillagerBtn.setOnClickListener(v -> {
-            addVillager();
-        });
-
-        removeShieldBtn.setOnClickListener(v -> {
-            removeShield();
-        });
-
-        addShieldBtn.setOnClickListener(v -> {
-            addShield();
-        });
 
         playBtn.setOnClickListener(v -> {
             setRoom();
@@ -92,9 +85,9 @@ public class ChooseRolesActivity extends AppCompatActivity {
      */
     private void setRoom() {
 
-        roomModel = new RoomModel(nameRoom, Timestamp.now(), numberOfPlayerInt, countWolfInt, countVillagerInt, countShieldInt);
-        if (AndroidUtil.isEqualSumAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt) &&
-            !(AndroidUtil.isWolfMoreThanVillagers(countWolfInt, countVillagerInt, countShieldInt))) {
+        roomModel = new RoomModel(nameRoom, Timestamp.now(), numberOfPlayerInt, adapter.getValueWolf(), adapter.getValueVillager(), adapter.getValueShield(), adapter.getValueSeer());
+        if (AndroidUtil.isEqualSumAllRoles(adapter.getValueWolf(), adapter.getValueVillager(), adapter.getValueShield(), adapter.getValueSeer(), numberOfPlayerInt) &&
+            !(AndroidUtil.isWolfMoreThanVillagers(adapter.getValueWolf(), adapter.getValueVillager(), adapter.getValueShield(), adapter.getValueSeer())) && adapter.getValueWolf() != 0) {
             setInProgress(true);
             FirebaseUtil.getRoomReference().add(roomModel).addOnCompleteListener(task -> {
                 setInProgress(false);
@@ -119,83 +112,6 @@ public class ChooseRolesActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
     }
-
-    /**
-     * Giảm số lượng sói đi 1 sau khi nhấp vào dấu -
-     * không thể giảm quá 0
-     */
-    private void removeWolf() {
-        countWolfInt = AndroidUtil.parseInt(countWolfTxt.getText().toString());
-        if (countWolfInt == 0) {
-        } else {
-            countWolfInt--;
-            countWolfTxt.setText(String.valueOf(countWolfInt));
-        }
-    }
-
-    /**
-     * Tăng số lượng sói lên 1 sau khi nhấp vào dấu +
-     */
-    private void addWolf() {
-        countWolfInt = AndroidUtil.parseInt(countWolfTxt.getText().toString());
-        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt)) {
-        } else {
-            countWolfInt++;
-            countWolfTxt.setText(String.valueOf(countWolfInt));
-        }
-    }
-
-    /**
-     * Giảm số lượng dân đi 1 sau khi nhấp vào dấu -
-     * không thể giảm quá 0
-     */
-    private void removeVillager() {
-        countVillagerInt = AndroidUtil.parseInt(countVillagerTxt.getText().toString());
-        if (countVillagerInt == 0) {
-        } else {
-            countVillagerInt--;
-            countVillagerTxt.setText(String.valueOf(countVillagerInt));
-        }
-    }
-
-    /**
-     * Tăng số lượng dân lên 1 sau khi nhấp vào dấu +
-     */
-    private void addVillager() {
-        countVillagerInt = AndroidUtil.parseInt(countVillagerTxt.getText().toString());
-        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt)) {
-        } else {
-            countVillagerInt++;
-            countVillagerTxt.setText(String.valueOf(countVillagerInt));
-        }
-    }
-
-    /**
-     * Giảm số lượng khiên đi 1 sau khi nhấp vào dấu -
-     * Không thể giảm quá 0
-     */
-    private void removeShield() {
-        countShieldInt = AndroidUtil.parseInt(countShieldTxt.getText().toString());
-        if (countShieldInt == 0) {
-        } else {
-            countShieldInt--;
-            countShieldTxt.setText(String.valueOf(countShieldInt));
-        }
-    }
-
-    /**
-     * Tăng số lượng khiên lên 1 sau khi nhấp vào dấu +
-     * tối đa 1 khiên trong game
-     */
-    private void addShield() {
-        countShieldInt = AndroidUtil.parseInt(countShieldTxt.getText().toString());
-        if (AndroidUtil.isMoreThanAllRoles(countWolfInt, countVillagerInt, countShieldInt, numberOfPlayerInt) || countShieldInt == 1) {
-        } else {
-            countShieldInt++;
-            countShieldTxt.setText(String.valueOf(countShieldInt));
-        }
-    }
-
     /**
      * Chỉnh visibitly cho Progressbar và playBtn
      *
@@ -212,19 +128,11 @@ public class ChooseRolesActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        countWolfTxt = findViewById(R.id.countWolfTxt);
-        countVillagerTxt = findViewById(R.id.countVillagerTxt);
-        countShieldTxt = findViewById(R.id.countShieldTxt);
         playBtn = findViewById(R.id.playBtn);
-        removeWolfBtn = findViewById(R.id.removeWolfBtn);
-        addWolfBtn = findViewById(R.id.addWolfBtn);
-        removeVillagerBtn = findViewById(R.id.removeVillagerBtn);
-        addVillagerBtn = findViewById(R.id.addVillagerBtn);
-        removeShieldBtn = findViewById(R.id.removeShieldBtn);
-        addShieldBtn = findViewById(R.id.addShieldBtn);
         backBtn = findViewById(R.id.backBtn);
         chooseRoleProgressBar = findViewById(R.id.progressBar);
         maxPlayerTxt = findViewById(R.id.maxPlayerTxt);
+        chooseRoleRecView = findViewById(R.id.chooseRoleRecView);
     }
 
 

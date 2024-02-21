@@ -35,8 +35,8 @@ public class RoleRecViewAdapter extends FirestoreRecyclerAdapter<PlayerModel, Ro
         if (model.getRole().equals("Shield")) {
             holder.roleImg.setImageResource(R.drawable.shield_icon);
         }
-        if (model.getRole().equals("Villager")) {
-            holder.roleImg.setImageResource(R.drawable.villager_icon);
+        if (model.getRole().equals("Seer")) {
+            holder.roleImg.setImageResource(R.drawable.seer_icon);
         }
     }
 

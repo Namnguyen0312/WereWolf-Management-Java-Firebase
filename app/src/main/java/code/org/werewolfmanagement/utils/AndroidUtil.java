@@ -23,6 +23,7 @@ public class AndroidUtil {
         bundle.putInt("valueOfWolf", roomModel.getValueOfWolf());
         bundle.putInt("valueOfVillager", roomModel.getValueOfVillager());
         bundle.putInt("valueOfShield", roomModel.getValueOfShield());
+        bundle.putInt("valueOfSeer", roomModel.getValueOfSeer());
         bundle.putString("roomId", roomModel.getRoomId());
         bundle.putInt("count", count);
         return bundle;
@@ -35,6 +36,7 @@ public class AndroidUtil {
         roomModel.setValueOfWolf(bundle.getInt("valueOfWolf"));
         roomModel.setValueOfVillager(bundle.getInt("valueOfVillager"));
         roomModel.setValueOfShield(bundle.getInt("valueOfShield"));
+        roomModel.setValueOfSeer(bundle.getInt("valueOfSeer"));
         roomModel.setRoomId(bundle.getString("roomId"));
 
         return roomModel;
@@ -44,9 +46,6 @@ public class AndroidUtil {
         return AnimationUtils.loadAnimation(context, anim);
     }
 
-    public static void getFragmentManagerAndSetAnim(FragmentManager fragmentManager, String name, int containerId, Fragment fragment, int in, int out) {
-        fragmentManager.beginTransaction().setCustomAnimations(in, out).replace(containerId, fragment).addToBackStack(name).commit();
-    }
 
     public static void passRoomModelAsIntent(Intent intent, RoomModel model, String roomId) {
         intent.putExtra("name", model.getName());
@@ -54,6 +53,8 @@ public class AndroidUtil {
         intent.putExtra("valueOfWolf", model.getValueOfWolf());
         intent.putExtra("valueOfVillager", model.getValueOfVillager());
         intent.putExtra("valueOfShield", model.getValueOfShield());
+        intent.putExtra("valueOfSeer", model.getValueOfSeer());
+
         intent.putExtra("roomId", roomId);
     }
 
@@ -65,6 +66,7 @@ public class AndroidUtil {
         roomModel.setValueOfWolf(intent.getIntExtra("valueOfWolf", 0));
         roomModel.setValueOfVillager(intent.getIntExtra("valueOfVillager", 0));
         roomModel.setValueOfShield(intent.getIntExtra("valueOfShield", 0));
+        roomModel.setValueOfSeer(intent.getIntExtra("valueOfSeer", 0));
         return roomModel;
     }
 
@@ -76,18 +78,18 @@ public class AndroidUtil {
         return Integer.parseInt(string);
     }
 
-    public static boolean isWolfMoreThanVillagers(int wolf, int villager , int shield){
-        if(wolf >= (villager + shield)) return true;
+    public static boolean isWolfMoreThanVillagers(int wolf, int villager , int shield, int seer){
+        if(wolf >= (villager + shield + seer)) return true;
         else  return false;
     }
 
-    public static boolean isMoreThanAllRoles(int wolf, int villager, int shield, int numberOfPlayer) {
-        if ((wolf + villager + shield) < numberOfPlayer) return false;
+    public static boolean isMoreThanAllRoles(int wolf, int villager, int shield, int seer ,int numberOfPlayer) {
+        if ((wolf + villager + shield + seer) < numberOfPlayer) return false;
         else return true;
     }
 
-    public static boolean isEqualSumAllRoles(int wolf, int villager, int shield, int numberOfPlayer) {
-        if ((wolf + villager + shield) == numberOfPlayer) return true;
+    public static boolean isEqualSumAllRoles(int wolf, int villager, int shield, int seer, int numberOfPlayer) {
+        if ((wolf + villager + shield + seer) == numberOfPlayer) return true;
         return false;
     }
 

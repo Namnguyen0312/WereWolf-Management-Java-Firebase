@@ -31,181 +31,186 @@
             android:id="@+id/maxPlayerTxt"
             android:layout_marginStart="10dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chooseRoleRecView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="100">
-
-            <LinearLayout
-                android:layout_width="120dp"
-                android:layout_height="250dp"
-                android:layout_weight="33"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:src="@drawable/werewolf_icon"
-                    app:tint="@color/black"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Wolf"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="5dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
-
-                    <ImageView
-                        android:id="@+id/removeWolfBtn"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginEnd="20dp"
-                        android:src="@drawable/remove_icon"
-                        app:tint="@color/my_secondary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="30sp"
-                        android:id="@+id/countWolfTxt" />
-
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/add_icon"
-                        app:tint="@color/my_secondary"
-                        android:layout_marginStart="20dp"
-                        android:id="@+id/addWolfBtn" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            android:layout_gravity="center"/>
 
 
-            <LinearLayout
-                android:layout_width="130dp"
-                android:layout_height="250dp"
-                android:layout_weight="33"
-                android:gravity="center"
-                android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:weightSum="100">-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:src="@drawable/villager_icon"
-                    app:tint="@color/black"
-                    android:layout_marginTop="10dp" />
+<!--            <LinearLayout-->
+<!--                android:layout_width="120dp"-->
+<!--                android:layout_height="250dp"-->
+<!--                android:layout_weight="33"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="vertical">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Villager"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="10dp" />
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="130dp"-->
+<!--                    android:src="@drawable/werewolf_icon"-->
+<!--                    app:tint="@color/black"-->
+<!--                    android:layout_marginTop="5dp" />-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Wolf"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_marginTop="5dp" />-->
 
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/remove_icon"
-                        app:tint="@color/my_secondary"
-                        android:layout_marginEnd="20dp"
-                        android:id="@+id/removeVillagerBtn" />
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_marginTop="10dp">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="30sp"
-                        android:id="@+id/countVillagerTxt" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/removeWolfBtn"-->
+<!--                        android:layout_width="35dp"-->
+<!--                        android:layout_height="35dp"-->
+<!--                        android:layout_marginEnd="20dp"-->
+<!--                        android:src="@drawable/remove_icon"-->
+<!--                        app:tint="@color/my_secondary" />-->
 
-                    <ImageView
-                        android:id="@+id/addVillagerBtn"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/add_icon"
-                        app:tint="@color/my_secondary" />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="0"-->
+<!--                        android:textSize="30sp"-->
+<!--                        android:id="@+id/countWolfTxt" />-->
 
-                </LinearLayout>
+<!--                    <ImageView-->
+<!--                        android:layout_width="35dp"-->
+<!--                        android:layout_height="35dp"-->
+<!--                        android:src="@drawable/add_icon"-->
+<!--                        app:tint="@color/my_secondary"-->
+<!--                        android:layout_marginStart="20dp"-->
+<!--                        android:id="@+id/addWolfBtn" />-->
 
-            </LinearLayout>
+<!--                </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="130dp"
-                android:layout_height="250dp"
-                android:layout_weight="33"
-                android:gravity="center"
-                android:orientation="vertical">
+<!--            </LinearLayout>-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:src="@drawable/shield_icon"
-                    android:layout_marginTop="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Shield"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="10dp" />
+<!--            <LinearLayout-->
+<!--                android:layout_width="130dp"-->
+<!--                android:layout_height="250dp"-->
+<!--                android:layout_weight="33"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="120dp"-->
+<!--                    android:src="@drawable/villager_icon"-->
+<!--                    app:tint="@color/black"-->
+<!--                    android:layout_marginTop="10dp" />-->
 
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/remove_icon"
-                        app:tint="@color/my_secondary"
-                        android:layout_marginEnd="20dp"
-                        android:id="@+id/removeShieldBtn" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Villager"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_marginTop="10dp" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="30sp"
-                        android:id="@+id/countShieldTxt" />
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_marginTop="10dp">-->
 
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/add_icon"
-                        app:tint="@color/my_secondary"
-                        android:layout_marginStart="20dp"
-                        android:id="@+id/addShieldBtn" />
+<!--                    <ImageView-->
+<!--                        android:layout_width="35dp"-->
+<!--                        android:layout_height="35dp"-->
+<!--                        android:src="@drawable/remove_icon"-->
+<!--                        app:tint="@color/my_secondary"-->
+<!--                        android:layout_marginEnd="20dp"-->
+<!--                        android:id="@+id/removeVillagerBtn" />-->
 
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="0"-->
+<!--                        android:textSize="30sp"-->
+<!--                        android:id="@+id/countVillagerTxt" />-->
 
-            </LinearLayout>
+<!--                    <ImageView-->
+<!--                        android:id="@+id/addVillagerBtn"-->
+<!--                        android:layout_width="35dp"-->
+<!--                        android:layout_height="35dp"-->
+<!--                        android:layout_marginStart="20dp"-->
+<!--                        android:src="@drawable/add_icon"-->
+<!--                        app:tint="@color/my_secondary" />-->
 
-        </LinearLayout>
+<!--                </LinearLayout>-->
+
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="130dp"-->
+<!--                android:layout_height="250dp"-->
+<!--                android:layout_weight="33"-->
+<!--                android:gravity="center"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="120dp"-->
+<!--                    android:src="@drawable/shield_icon"-->
+<!--                    android:layout_marginTop="10dp" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Shield"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_marginTop="10dp" />-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_marginTop="10dp">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="35dp"-->
+<!--                        android:layout_height="35dp"-->
+<!--                        android:src="@drawable/remove_icon"-->
+<!--                        app:tint="@color/my_secondary"-->
+<!--                        android:layout_marginEnd="20dp"-->
+<!--                        android:id="@+id/removeShieldBtn" />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="0"-->
+<!--                        android:textSize="30sp"-->
+<!--                        android:id="@+id/countShieldTxt" />-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="35dp"-->
+<!--                        android:layout_height="35dp"-->
+<!--                        android:src="@drawable/add_icon"-->
+<!--                        app:tint="@color/my_secondary"-->
+<!--                        android:layout_marginStart="20dp"-->
+<!--                        android:id="@+id/addShieldBtn" />-->
+
+<!--                </LinearLayout>-->
+
+<!--            </LinearLayout>-->
 
 
         <Button
@@ -228,6 +233,4 @@
             android:visibility="gone"/>
 
     </LinearLayout>
-
-
 </LinearLayout>

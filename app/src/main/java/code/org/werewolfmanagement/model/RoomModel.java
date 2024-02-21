@@ -7,19 +7,20 @@ public class RoomModel {
     private String name;
     private Timestamp createdTimestamp;
     private int numberOfPlayer;
-    private int valueOfWolf, valueOfVillager, valueOfShield;
+    private int valueOfWolf, valueOfVillager, valueOfShield, valueOfSeer;
     private String roomId;
 
     public RoomModel() {
     }
 
-    public RoomModel(String name, Timestamp createdTimestamp, int numberOfPlayer, int valueOfWolf, int valueOfVillager, int valueOfShield) {
+    public RoomModel(String name, Timestamp createdTimestamp, int numberOfPlayer, int valueOfWolf, int valueOfVillager, int valueOfShield, int valueOfSeer) {
         this.name = name;
         this.createdTimestamp = createdTimestamp;
         this.numberOfPlayer = numberOfPlayer;
         this.valueOfWolf = valueOfWolf;
         this.valueOfVillager = valueOfVillager;
         this.valueOfShield = valueOfShield;
+        this.valueOfSeer = valueOfSeer;
     }
 
 
@@ -77,6 +78,14 @@ public class RoomModel {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public int getValueOfSeer() {
+        return valueOfSeer;
+    }
+
+    public void setValueOfSeer(int valueOfSeer) {
+        this.valueOfSeer = valueOfSeer;
     }
 }
 

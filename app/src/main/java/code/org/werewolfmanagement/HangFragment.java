@@ -67,7 +67,7 @@ public class HangFragment extends Fragment {
         layoutClick.setOnClickListener(v -> {
             if(roomModel.getValueOfWolf() == 0){
                 setArgumentToEndGameFragmentWithWolfLose();
-            } else if (AndroidUtil.isWolfMoreThanVillagers(roomModel.getValueOfWolf(), roomModel.getValueOfVillager(), roomModel.getValueOfShield())) {
+            } else if (AndroidUtil.isWolfMoreThanVillagers(roomModel.getValueOfWolf(), roomModel.getValueOfVillager(), roomModel.getValueOfShield(), roomModel.getValueOfSeer())) {
                 setArgumentToEndGameFragmentWithWolfWin();
             } else {
                 setArgumentToNightFragment();

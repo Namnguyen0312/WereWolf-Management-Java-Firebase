@@ -64,7 +64,7 @@ public class DeadFragment extends Fragment {
         setUpKilledPlayerRecView();
 
         layoutClick.setOnClickListener(v -> {
-            if (AndroidUtil.isWolfMoreThanVillagers(roomModel.getValueOfWolf(), roomModel.getValueOfVillager(), roomModel.getValueOfShield())) {
+            if (AndroidUtil.isWolfMoreThanVillagers(roomModel.getValueOfWolf(), roomModel.getValueOfVillager(), roomModel.getValueOfShield(), roomModel.getValueOfSeer())) {
                 setArgumentToEndGameFragment();
             } else {
                 setArgumentToDiscussFragment();

@@ -40,6 +40,9 @@ public class ShieldProtectedRoleRecViewAdapter extends FirestoreRecyclerAdapter<
         if (model.getRole().equals("Villager")) {
             holder.roleImg.setImageResource(R.drawable.villager_icon);
         }
+        if (model.getRole().equals("Seer")) {
+            holder.roleImg.setImageResource(R.drawable.seer_icon);
+        }
 
         if (model.isProtectedLastNight()) {
             holder.playerItemView.setEnabled(false);
