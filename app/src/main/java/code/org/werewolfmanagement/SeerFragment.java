@@ -35,8 +35,6 @@ public class SeerFragment extends Fragment implements SeerRecViewAdapter.OnItemC
     private int countNight, countCall;
     private PlayerModel playerModel;
 
-    private static final String TAG = "SeerFragment";
-
     public SeerFragment() {
     }
 

@@ -148,6 +148,9 @@ public class DeadFragment extends Fragment {
                                     } else if (documentSnapshot.getString("role").equals("Shield")) {
                                         roomModel.setValueOfShield(roomModel.getValueOfShield() - 1);
                                         Log.d(TAG, "Shield" + roomModel.getValueOfShield());
+                                    } else if (documentSnapshot.getString("role").equals("Seer")) {
+                                        roomModel.setValueOfSeer(roomModel.getValueOfSeer() - 1);
+                                        Log.d(TAG, "Seer" + roomModel.getValueOfSeer());
                                     }
 
                                     Map<String, Object> updates = new HashMap<>();
